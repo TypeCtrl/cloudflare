@@ -15,11 +15,9 @@ npm install @ctrl/cloudflare
 ### Use
 This package is meant to be used with [got](https://github.com/sindresorhus/got). After a failed request, use the `catchCloudflare` function to resolve your request.
 
-Requires passing cookiejar to got. Reusing the cookiejar in subsequent requests will bypass the cloudflare anti-bot page until the cookie expires.
+Requires passing cookiejar to got. Reusing the cookiejar in subsequent requests will bypass the cloudflare anti-bot page, until the cookie expires.
 
-`catchCloudflare` will rethrow if it is unable to bypass of if the error is not cloudflare related.
-
-Call `catchCloudflare` passing the error and the options used to make the request.
+Call `catchCloudflare(err, options)` passing the error and the options used to make the request. `catchCloudflare` will rethrow if it is unable to bypass of if the error is not cloudflare related.
 
 ```ts
 import { catchCloudflare } from '@ctrl/cloudflare';
@@ -54,4 +52,4 @@ async function main() {
 
 ### See Also
 - [cloudflare-scrape](https://github.com/Anorov/cloudflare-scrape) - python bypass using V8
-- [cloudscraper](https://github.com/codemanki/cloudscraper) - js cloudflare solver using[request](https://github.com/request/request)
+- [cloudscraper](https://github.com/codemanki/cloudscraper) - js cloudflare solver using [request](https://github.com/request/request)

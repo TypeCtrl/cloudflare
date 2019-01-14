@@ -1,0 +1,61 @@
+{
+  "name": "cloudflare",
+  "version": "0.0.0-placeholder",
+  "description": "",
+  "author": "Scott Cooper <scttcper@gmail.com>",
+  "license": "MIT",
+  "repository": "",
+  "keywords": [
+    "cloudflare",
+    "typescript"
+  ],
+  "source": "src/index.ts",
+  "main": "./cloudflare.js",
+  "module": "./cloudflare.m.js",
+  "typings": "./src/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "lint": "tslint -t stylish -p .",
+    "lint:fix": "tslint -p tsconfig.json -t stylish --fix 'src/**/*.ts' 'test/**/*.ts'",
+    "prebuild": "rimraf dist",
+    "build": "microbundle build --target node --format cjs,es -o dist",
+    "postbuild": "cp package.json dist && cp LICENSE dist && cp README.md dist && rimraf dist/test",
+    "build:docs": "typedoc --out docs --target es6 --theme minimal --mode file src && touch docs/.nojekyll",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --coverage --no-cache",
+    "semantic-release": "cd dist && semantic-release"
+  },
+  "dependencies": {
+    "@types/got": "^9.3.0",
+    "delay": "^4.1.0",
+    "got": "^9.5.0",
+    "tough-cookie": "^3.0.0",
+    "ua-string": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "23.3.12",
+    "@types/nock": "^9.3.0",
+    "@types/node": "10.12.18",
+    "@types/tough-cookie": "^2.3.4",
+    "jest": "23.6.0",
+    "microbundle": "0.9.0",
+    "nock": "^10.0.6",
+    "prettier": "1.15.3",
+    "rimraf": "2.6.3",
+    "semantic-release": "15.13.3",
+    "ts-jest": "23.10.5",
+    "ts-node": "7.0.1",
+    "tslint": "5.12.1",
+    "tslint-config-prettier": "1.17.0",
+    "tslint-xo": "0.11.0",
+    "typedoc": "0.14.1",
+    "typescript": "3.2.2"
+  },
+  "release": {
+    "branch": "master"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  }
+}

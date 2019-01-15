@@ -1,4 +1,4 @@
-import got from 'got';
+import got, { Response } from 'got';
 import delay from 'delay';
 import uaString from 'ua-string';
 
@@ -88,7 +88,7 @@ class CloudflareMaxAttemptsError extends Error {
   }
 }
 
-export async function catchCloudflare(error: any, options: any, attempts = 1) {
+export async function catchCloudflare<T extends Buffer | string | object>(error: any, options: any, attempts = 1): Promise<Response<T>> {
   // must have body present
   if (!error.response || !error.response.body) {
     throw error;
@@ -128,8 +128,5 @@ export async function catchCloudflare(error: any, options: any, attempts = 1) {
   const submitUrl = `${error.protocol}//${
     error.hostname
   }/cdn-cgi/l/chk_jschl?jschl_vc=${jschlVc}&pass=${pass}&jschl_answer=${jschlAnswer}`;
-  const res = await got(submitUrl, options).catch(err => catchCloudflare(err, options, attempts + 1));
-  // attch number of cloudflare attempts made to result
-  res.attempts = attempts;
-  return res;
+  return got(submitUrl, options).catch(err => catchCloudflare(err, options, attempts + 1));
 }

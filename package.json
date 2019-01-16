@@ -5,6 +5,9 @@
   "author": "Scott Cooper <scttcper@gmail.com>",
   "license": "MIT",
   "repository": "typectrl/cloudflare",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "cloudflare",
     "got",

@@ -1,10 +1,18 @@
 import fs from 'fs';
+import got, { GotOptions } from 'got';
+import nock from 'nock';
 import path from 'path';
 import { CookieJar } from 'tough-cookie';
+import uaString from 'ua-string';
+import * as delay from 'delay';
 
-import { solveChallenge, isCloudflareCaptcha } from '../src/index';
+import { catchCloudflare, isCloudflareCaptcha, solveChallenge } from '../src/index';
 
-describe('Dummy test', () => {
+// disable timeout for tests
+jest.mock('delay');
+(delay.default as any).mockImplementation(() => Promise.resolve());
+
+describe('cloudflare', () => {
   it('should solve 2018 1', () => {
     const html = fs.readFileSync(path.join(__dirname, `./html/2018_1`), 'utf8');
     expect(solveChallenge(html, 'example-site.dev')).toBe('example-site.dev'.length + -5.33265406);
@@ -12,7 +20,9 @@ describe('Dummy test', () => {
 
   it('should solve 2018 2', () => {
     const html = fs.readFileSync(path.join(__dirname, `./html/2018_2`), 'utf8');
-    expect(solveChallenge(html, 'example-site.dev')).toBe('example-site.dev'.length + -1.9145049856);
+    expect(solveChallenge(html, 'example-site.dev')).toBe(
+      'example-site.dev'.length + -1.9145049856,
+    );
   });
 
   it('should spot captcha', () => {
@@ -20,9 +30,49 @@ describe('Dummy test', () => {
     expect(isCloudflareCaptcha(html)).toBe(true);
   });
 
-  // it('should be instantiable', async () => {
-  //   const scraper = create();
-  //   const scraped = await scraper.get('', { cookieJar: new CookieJar() }).catch(e => console.log(e));
-  //   console.log(scraped);
-  // });
+  it('should catch cloudflare page and solve challenge', async () => {
+    // failed request blocked by cloudflare
+    const html = fs.readFileSync(path.join(__dirname, `./html/2018_1`), 'utf8');
+    const f = nock('http://example.com')
+      .get('/')
+      .reply(503, html, {
+        server: 'cloudflare',
+      });
+
+    const success = `<h1>Hello</h1>`;
+    const n = nock('http://example.com')
+      .get('/cdn-cgi/l/chk_jschl')
+      .query({
+        jschl_vc: '427c2b1cd4fba29608ee81b200e94bfa',
+        pass: '1543827239.915-44n9IE20mS',
+        jschl_answer: '5.66734594',
+      })
+      .reply(200, success, {
+        server: 'cloudflare',
+      });
+
+    const cookieJar = new CookieJar();
+    const options: GotOptions<null> = {
+      retry: {
+        retries: 0,
+        statusCodes: [408, 413, 429, 500, 502, 504],
+      },
+      cookieJar,
+      headers: { 'user-agent': uaString },
+    };
+
+    let res: any;
+    try {
+      res = await got.get('http://example.com', options);
+      // always will throw
+      expect(false).toBe(true);
+    } catch (err) {
+      // first request is fufilled
+      expect(f.isDone()).toBe(true);
+      // catch our cloudflare error
+      res = await catchCloudflare(err, options);
+    }
+    expect(res.body).toBe(success);
+    expect(n.isDone()).toBe(true);
+  });
 });

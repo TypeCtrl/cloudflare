@@ -34,7 +34,12 @@ async function main() {
     headers: {
       // helps to pass user-agent
       'user-agent': uaString,
-    }
+    }, 
+    retry: {
+      // either disable retry or remove status code 503 from retries
+      // retries: 0,
+      statusCodes: [408, 413, 429, 500, 502, 504],
+    },
   };
 
   let res;

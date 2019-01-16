@@ -1,4 +1,4 @@
-import got, { Response } from 'got';
+import got, { Response, RetryOptions } from 'got';
 import delay from 'delay';
 import uaString from 'ua-string';
 
@@ -95,7 +95,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(error:
   }
   // must have cookiejar
   if (!options.cookieJar) {
-    throw new Error('cookieJar required');
+    throw new Error('options.cookieJar required');
   }
   const body: string = error.response.body;
   // error is not cloudflare related - rethrow
@@ -114,6 +114,9 @@ export async function catchCloudflare<T extends Buffer | string | object>(error:
   options.headers = setupHeaders(options.headers);
   options.headers.referer = error.response.url;
   options.headers['cache-control'] = options.headers['cache-control'] || 'private';
+  const retry: RetryOptions = options.retry || {};
+  options.retry.statusCodes = [408, 413, 429, 500, 502, 504];
+  options.retry = retry;
 
   // get form field values
   const jschlVc = jschlValue(body);

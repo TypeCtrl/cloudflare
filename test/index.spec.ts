@@ -10,7 +10,7 @@ import { catchCloudflare, isCloudflareCaptcha, solveChallenge } from '../src/ind
 
 // disable timeout for tests
 jest.mock('delay');
-(delay.default as any).mockImplementation(() => Promise.resolve());
+(delay.default as any).mockImplementation(async () => Promise.resolve());
 
 describe('cloudflare', () => {
   it('should solve 2018 1', () => {

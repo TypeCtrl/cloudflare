@@ -131,5 +131,9 @@ export async function catchCloudflare<T extends Buffer | string | object>(error:
   const submitUrl = `${error.protocol}//${
     error.hostname
   }/cdn-cgi/l/chk_jschl?jschl_vc=${jschlVc}&pass=${pass}&jschl_answer=${jschlAnswer}`;
-  return got(submitUrl, options).catch(err => catchCloudflare(err, options, attempts + 1));
+  try {
+    return await got(submitUrl, options);
+  } catch (err) {
+    return catchCloudflare(err, options, attempts + 1);
+  }
 }

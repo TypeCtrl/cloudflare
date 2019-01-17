@@ -1,5 +1,5 @@
 {
-  "name": "cloudflare",
+  "name": "@ctrl/cloudflare",
   "version": "0.0.0-placeholder",
   "description": "Bypass Cloudflare's anti-bot page also known as I'm Under Attack Mode",
   "author": "Scott Cooper <scttcper@gmail.com>",

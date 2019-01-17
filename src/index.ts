@@ -88,7 +88,11 @@ class CloudflareMaxAttemptsError extends Error {
   }
 }
 
-export async function catchCloudflare<T extends Buffer | string | object>(error: any, options: any, attempts = 1): Promise<Response<T>> {
+export async function catchCloudflare<T extends Buffer | string | object>(
+  error: any,
+  options: any,
+  attempts = 1,
+): Promise<Response<T>> {
   // must have body present
   if (!error.response || !error.response.body) {
     throw error;
@@ -128,9 +132,13 @@ export async function catchCloudflare<T extends Buffer | string | object>(error:
   await delay(5000);
 
   // make request with answer
-  const submitUrl = `${error.protocol}//${
-    error.hostname
-  }/cdn-cgi/l/chk_jschl?jschl_vc=${jschlVc}&pass=${pass}&jschl_answer=${jschlAnswer}`;
+  const submitUrl = `${error.protocol}//${error.hostname}`;
+  options.path = '/cdn-cgi/l/chk_jschl';
+  options.query = {
+    jschl_vc: jschlVc,
+    pass,
+    jschl_answer: jschlAnswer,
+  };
   try {
     return await got(submitUrl, options);
   } catch (err) {

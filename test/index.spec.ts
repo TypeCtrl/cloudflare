@@ -34,7 +34,8 @@ describe('cloudflare', () => {
     // failed request blocked by cloudflare
     const html = fs.readFileSync(path.join(__dirname, `./html/2018_1`), 'utf8');
     const f = nock('http://example.com')
-      .get('/')
+    .log(console.log)
+      .get('/search')
       .reply(503, html, {
         server: 'cloudflare',
       });
@@ -53,6 +54,7 @@ describe('cloudflare', () => {
 
     const cookieJar = new CookieJar();
     const options: GotOptions<null> = {
+      path: '/search',
       retry: {
         retries: 0,
         statusCodes: [408, 413, 429, 500, 502, 504],

@@ -116,7 +116,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   }
   options.headers = options.headers || {};
   options.headers = setupHeaders(options.headers);
-  options.headers.referer = error.response.url;
+  options.headers.referer = error.url.substring(0, error.url.length - 1) + (error.path || '');
   options.headers['cache-control'] = options.headers['cache-control'] || 'private';
   const retry: RetryOptions = options.retry || {};
   options.retry.statusCodes = [408, 413, 429, 500, 502, 504];

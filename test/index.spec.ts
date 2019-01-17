@@ -34,22 +34,35 @@ describe('cloudflare', () => {
     // failed request blocked by cloudflare
     const html = fs.readFileSync(path.join(__dirname, `./html/2018_1`), 'utf8');
     const f = nock('http://example.com')
-    .log(console.log)
       .get('/search')
       .reply(503, html, {
         server: 'cloudflare',
       });
 
     const success = `<h1>Hello</h1>`;
-    const n = nock('http://example.com')
+    const n = nock('http://example.com', {
+      reqheaders: {
+        referer: 'http://example.com/search',
+      },
+    })
       .get('/cdn-cgi/l/chk_jschl')
       .query({
         jschl_vc: '427c2b1cd4fba29608ee81b200e94bfa',
         pass: '1543827239.915-44n9IE20mS',
         jschl_answer: '5.66734594',
       })
-      .reply(200, success, {
+      .reply(302, '', {
+        Location: 'http://torrentz2.eu/search?f=zoolander',
         server: 'cloudflare',
+      });
+
+    const z = nock('http://torrentz2.eu')
+      .get('/search')
+      .query({
+        f: 'zoolander',
+      })
+      .reply(200, success, {
+        location: 'https://torrentz2.eu/searchA?f=zoolander',
       });
 
     const cookieJar = new CookieJar();
@@ -76,5 +89,6 @@ describe('cloudflare', () => {
     }
     expect(res.body).toBe(success);
     expect(n.isDone()).toBe(true);
+    expect(z.isDone()).toBe(true);
   });
 });

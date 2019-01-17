@@ -1,4 +1,4 @@
-# cloudflare
+# cloudflare [![npm](https://img.shields.io/npm/v/@ctrl/cloudflare.svg?maxAge=3600)](https://www.npmjs.com/package/@ctrl/cloudflare) [![build status](https://travis-ci.com/TypeCtrl/cloudflare.svg?branch=master)](https://travis-ci.org/typectrl/cloudflare) [![coverage status](https://codecov.io/gh/typectrl/cloudflare/branch/master/graph/badge.svg)](https://codecov.io/gh/typectrl/cloudflare)
 
 > Bypass Cloudflare's anti-bot page also known as I'm Under Attack Mode
 

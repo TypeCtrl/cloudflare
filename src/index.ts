@@ -129,7 +129,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   const jschlAnswer = solveChallenge(body, error.hostname);
 
   // wait 6 seconds
-  await delay(5000);
+  await delay(6000);
 
   // make request with answer
   const submitUrl = `${error.protocol}//${error.hostname}`;

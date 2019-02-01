@@ -43,7 +43,7 @@
     "@types/ua-string": "2.0.0",
     "jest": "23.6.0",
     "nock": "10.0.6",
-    "prettier": "1.16.0",
+    "prettier": "1.16.3",
     "rimraf": "2.6.3",
     "semantic-release": "15.13.3",
     "tough-cookie": "3.0.0",

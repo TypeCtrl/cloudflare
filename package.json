@@ -38,7 +38,7 @@
   "devDependencies": {
     "@types/jest": "23.3.13",
     "@types/nock": "9.3.1",
-    "@types/node": "10.12.18",
+    "@types/node": "10.12.19",
     "@types/tough-cookie": "2.3.5",
     "@types/ua-string": "2.0.0",
     "jest": "23.6.0",

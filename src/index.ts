@@ -9,7 +9,7 @@ bug report at https://github.com/typectrl/cloudflare/issues"\
 `;
 
 export function isCloudflareChallenge(statusCode: number, headers: any, body: string) {
-  const server: string = headers.server;
+  const { server } = headers;
   return (
     statusCode === 503 &&
     server.startsWith('cloudflare') &&
@@ -22,6 +22,7 @@ export function isCloudflareCaptcha(body: string) {
   if (body.indexOf('why_captcha') !== -1 || /cdn-cgi\/l\/chk_captcha/i.test(body)) {
     return true;
   }
+
   return false;
 }
 
@@ -43,7 +44,7 @@ export function solveChallenge(body: string, domain: string): number {
 
   // must eval javascript - potentially unsafe
   try {
-    // tslint:disable-next-line:no-eval
+    // eslint-disable-next-line no-eval
     return Number(eval(js).toFixed(10)) + domain.length;
   } catch (err) {
     throw new Error(`Error occurred during evaluation: ${err.message}`);
@@ -66,7 +67,7 @@ export function passValue(body: string) {
  * sets headers.accept and headers.user-agent if not exist
  * @param headers existing headers
  */
-export function setupHeaders(headers: any = {}) {
+export function setupHeaders(headers: any = {}): any {
   headers.accept =
     headers.accept ||
     'application/xml,application/xhtml+xml,text/html;q=0.9, text/plain;q=0.8,image/png,*/*;q=0.5';
@@ -97,26 +98,31 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   if (!error.response || !error.response.body) {
     throw error;
   }
+
   // must have cookiejar
   if (!options.cookieJar) {
     throw new Error('options.cookieJar required');
   }
-  const body: string = error.response.body;
+
+  const { body } = error.response;
   // error is not cloudflare related - rethrow
   if (!isCloudflareChallenge(error.response.statusCode, error.response.headers, body)) {
     throw error;
   }
+
   // recaptcha captcha encountered
   if (isCloudflareCaptcha(body)) {
     throw new CaptchaError('Cloudflare captcha encountered');
   }
+
   // max attempt error
   if (attempts === 4) {
     throw new CloudflareMaxAttemptsError(`Unable to bypass cloudflare attempts: ${attempts}`);
   }
+
   options.headers = options.headers || {};
   options.headers = setupHeaders(options.headers);
-  options.headers.referer = `${error.url.substring(0, error.url.length - 1)}${(error.path || '')}`;
+  options.headers.referer = `${error.url.substring(0, error.url.length - 1)}${error.path || ''}`;
   options.headers['cache-control'] = options.headers['cache-control'] || 'private';
   const retry: RetryOptions = options.retry || {};
   options.retry.statusCodes = [408, 413, 429, 500, 502, 504];
@@ -135,8 +141,10 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   const submitUrl = `${error.protocol}//${error.hostname}`;
   options.path = '/cdn-cgi/l/chk_jschl';
   options.query = {
+    // eslint-disable-next-line @typescript-eslint/camelcase
     jschl_vc: jschlVc,
     pass,
+    // eslint-disable-next-line @typescript-eslint/camelcase
     jschl_answer: jschlAnswer,
   };
   try {

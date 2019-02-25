@@ -14,32 +14,32 @@ jest.mock('delay');
 
 describe('cloudflare', () => {
   it('should solve 2018 1', () => {
-    const html = fs.readFileSync(path.join(__dirname, `./html/2018_1`), 'utf8');
+    const html = fs.readFileSync(path.join(__dirname, './html/2018_1'), 'utf8');
     expect(solveChallenge(html, 'example-site.dev')).toBe('example-site.dev'.length + -5.33265406);
   });
 
   it('should solve 2018 2', () => {
-    const html = fs.readFileSync(path.join(__dirname, `./html/2018_2`), 'utf8');
+    const html = fs.readFileSync(path.join(__dirname, './html/2018_2'), 'utf8');
     expect(solveChallenge(html, 'example-site.dev')).toBe(
       'example-site.dev'.length + -1.9145049856,
     );
   });
 
   it('should spot captcha', () => {
-    const html = fs.readFileSync(path.join(__dirname, `./html/captcha`), 'utf8');
+    const html = fs.readFileSync(path.join(__dirname, './html/captcha'), 'utf8');
     expect(isCloudflareCaptcha(html)).toBe(true);
   });
 
   it('should catch cloudflare page and solve challenge', async () => {
     // failed request blocked by cloudflare
-    const html = fs.readFileSync(path.join(__dirname, `./html/2018_1`), 'utf8');
+    const html = fs.readFileSync(path.join(__dirname, './html/2018_1'), 'utf8');
     const f = nock('http://example.com')
       .get('/search')
       .reply(503, html, {
         server: 'cloudflare',
       });
 
-    const success = `<h1>Hello</h1>`;
+    const success = '<h1>Hello</h1>';
     const n = nock('http://example.com', {
       reqheaders: {
         referer: 'http://example.com/search',
@@ -47,8 +47,10 @@ describe('cloudflare', () => {
     })
       .get('/cdn-cgi/l/chk_jschl')
       .query({
+        // eslint-disable-next-line @typescript-eslint/camelcase
         jschl_vc: '427c2b1cd4fba29608ee81b200e94bfa',
         pass: '1543827239.915-44n9IE20mS',
+        // eslint-disable-next-line @typescript-eslint/camelcase
         jschl_answer: '5.66734594',
       })
       .reply(302, '', {
@@ -87,6 +89,7 @@ describe('cloudflare', () => {
       // catch our cloudflare error
       res = await catchCloudflare(err, options);
     }
+
     expect(res.body).toBe(success);
     expect(n.isDone()).toBe(true);
     expect(z.isDone()).toBe(true);

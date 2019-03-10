@@ -94,4 +94,9 @@ describe('cloudflare', () => {
     expect(n.isDone()).toBe(true);
     expect(z.isDone()).toBe(true);
   });
+
+  it('should catch non-puzzle', () => {
+    const html = '<div>Hello</div>';
+    expect(() => solveChallenge(html, 'example-site.dev')).toThrow();
+  });
 });

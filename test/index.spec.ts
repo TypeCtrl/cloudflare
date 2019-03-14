@@ -4,25 +4,27 @@ import nock from 'nock';
 import path from 'path';
 import { CookieJar } from 'tough-cookie';
 import uaString from 'ua-string';
-import * as delay from 'delay';
+import delay from 'delay';
 
 import { catchCloudflare, isCloudflareCaptcha, solveChallenge } from '../src/index';
 
 // disable timeout for tests
 jest.mock('delay');
-(delay.default as any).mockImplementation(async () => Promise.resolve());
+(delay as any).mockImplementation(async () => Promise.resolve());
 
 describe('cloudflare', () => {
   it('should solve 2018 1', () => {
     const html = fs.readFileSync(path.join(__dirname, './html/2018_1'), 'utf8');
-    expect(solveChallenge(html, 'example-site.dev')).toBe('example-site.dev'.length + -5.33265406);
+    const challenge = solveChallenge(html, 'example-site.dev');
+    expect(challenge.answer).toBe('example-site.dev'.length + -5.33265406);
+    expect(challenge.ms).toBe(4000);
   });
 
   it('should solve 2018 2', () => {
     const html = fs.readFileSync(path.join(__dirname, './html/2018_2'), 'utf8');
-    expect(solveChallenge(html, 'example-site.dev')).toBe(
-      'example-site.dev'.length + -1.9145049856,
-    );
+    const challenge = solveChallenge(html, 'example-site.dev');
+    expect(challenge.answer).toBe('example-site.dev'.length + -1.9145049856);
+    expect(challenge.ms).toBe(4000);
   });
 
   it('should spot captcha', () => {

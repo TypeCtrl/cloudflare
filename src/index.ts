@@ -26,8 +26,10 @@ export function isCloudflareCaptcha(body: string) {
   return false;
 }
 
-export function solveChallenge(body: string, domain: string): number {
-  const timeoutReg = /setTimeout\(function\(\){\s+(var s,t,o,p,b,r,e,a,k,i,n,g,f.+?\r?\n[\s\S]+?a\.value =.+?)\r?\n/;
+export function solveChallenge(body: string, domain: string) {
+  // regex without selecting setTimeout delay ms for reference
+  // const timeoutReg = /setTimeout\(function\(\){\s+(var s,t,o,p,b,r,e,a,k,i,n,g,f.+?\r?\n[\s\S]+?a\.value =.+?)\r?\n/;
+  const timeoutReg = /setTimeout\(function\(\){\s+(var s,t,o,p,b,r,e,a,k,i,n,g,f.+?\r?\n[\s\S]+?a\.value =.+?)\r?\n[\s\S]+(\d{4,5})\);/;
   const timeout = timeoutReg.exec(body);
   let js = timeout && timeout.length ? timeout[1] : '';
   js = js.replace(/a\.value =(.+?) \+ .+?;/i, '$1');
@@ -42,10 +44,15 @@ export function solveChallenge(body: string, domain: string): number {
     throw new Error(`Error parsing Cloudflare IUAM Javascript challenge. ${BUG_REPORT}`);
   }
 
+  // get setTimeout length that cloudflare has mandated
+  const ms = timeout && timeout.length > 1 ? Number(timeout[2]) : 6000;
+
   // must eval javascript - potentially unsafe
+  // eslint-disable-next-line no-eval
+  const answer = Number(eval(js).toFixed(10)) + domain.length;
+
   try {
-    // eslint-disable-next-line no-eval
-    return Number(eval(js).toFixed(10)) + domain.length;
+    return { ms, answer };
   } catch (err) {
     throw new Error(`Error occurred during evaluation: ${err.message}`);
   }
@@ -132,10 +139,10 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   const jschlVc = jschlValue(body);
   const pass = passValue(body);
   // solve js challenge
-  const jschlAnswer = solveChallenge(body, error.hostname);
+  const challenge = solveChallenge(body, error.hostname);
 
-  // wait 6 seconds
-  await delay(6000);
+  // defaults to 6 seconds or ms found in html
+  await delay(challenge.ms);
 
   // make request with answer
   const submitUrl = `${error.protocol}//${error.hostname}`;
@@ -145,7 +152,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
     jschl_vc: jschlVc,
     pass,
     // eslint-disable-next-line @typescript-eslint/camelcase
-    jschl_answer: jschlAnswer,
+    jschl_answer: challenge.answer,
   };
   try {
     return await got(submitUrl, options);

@@ -1,6 +1,8 @@
 import got, { Response, RetryOptions } from 'got';
 import delay from 'delay';
 import uaString from 'ua-string';
+import vm from 'vm';
+import { Buffer } from 'buffer';
 
 const BUG_REPORT = `\
 Cloudflare may have changed their technique, or there may be a bug in the script.
@@ -32,7 +34,7 @@ export function solveChallenge(body: string, domain: string) {
   const timeoutReg = /setTimeout\(function\(\){\s+(var s,t,o,p,b,r,e,a,k,i,n,g,f.+?\r?\n[\s\S]+?a\.value =.+?)\r?\n[\s\S]+(\d{4,5})\);/;
   const timeout = timeoutReg.exec(body);
   let js = timeout && timeout.length ? timeout[1] : '';
-  js = js.replace(/a\.value =(.+?) \+ .+?;/i, '$1');
+  js = js.replace(/a\.value = (.+\.toFixed\(10\);).+", r"\1/i, '$1');
   js = js.replace(/\s{3,}[a-z](?: = |\.).+/g, '');
   js = js.replace(/'; \d+'/g, '');
 
@@ -47,9 +49,34 @@ export function solveChallenge(body: string, domain: string) {
   // get setTimeout length that cloudflare has mandated
   const ms = timeout && timeout.length > 1 ? Number(timeout[2]) : 6000;
 
-  // must eval javascript - potentially unsafe
+  // 2019-03-20: Cloudflare sometimes stores part of the challenge in a div which is later
+  // added using document.getElementById(x).innerHTML, so it is necessary to simulate that
+  // method and value.
+  let k = '';
+  let val = '';
+  const kReg = /k\s+=\s+'([^']+)';/g;
+  try {
+    // Find the id of the div in the javascript code.
+    const kResult = kReg.exec(body);
+    k = kResult && kResult.length ? kResult[1] : '';
+    const valReg = new RegExp(`<div(.*)id="${k}"(.*)>(.*)</div>`, 'g');
+    const valResult = valReg.exec(body);
+    val = valResult && valResult.length ? valResult[3] : '';
+  } catch {
+    // If not available, either the code has been modified again, or the old style challenge is used.
+    // ignore errors
+  }
+
+  const a = 'var a = {};';
+  const g = 'var g = String.fromCharCode;';
+  const document = `var document= {getElementById: function(x) { return {innerHTML:"${val}"};}};`;
+  const dom = `var t = "${domain}";`;
+  const atob = 'var atob = function(str) {return Buffer.from(str, "base64").toString("binary");};';
+  const jsx = a + dom + atob + g + document + js;
+  const str = vm.runInNewContext(jsx, { Buffer, g: String.fromCharCode }, { timeout: 5000 });
+  // must eval javascript - potentially very unsafe
   // eslint-disable-next-line no-eval
-  const answer = Number(eval(js).toFixed(10)) + domain.length;
+  const answer = Number(str);
 
   try {
     return { ms, answer };
@@ -59,15 +86,21 @@ export function solveChallenge(body: string, domain: string) {
 }
 
 export function jschlValue(body: string) {
-  const vcReg = /name="jschl_vc" value="(\w+)"/g;
+  const vcReg = /name="jschl_vc"\svalue="(\w+)"/g;
   const vc = vcReg.exec(body);
   return vc && vc.length ? vc[1] : '';
 }
 
 export function passValue(body: string) {
-  const passReg = /name="pass" value="(.+?)"/g;
+  const passReg = /name="pass"\svalue="(.+?)"/g;
   const p = passReg.exec(body);
   return p && p.length ? p[1] : '';
+}
+
+export function sValue(body: string) {
+  const sReg = /name="s"\svalue="([^"]+)/g;
+  const s = sReg.exec(body);
+  return s && s.length ? s[1] : '';
 }
 
 /**
@@ -138,6 +171,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   // get form field values
   const jschlVc = jschlValue(body);
   const pass = passValue(body);
+  const s = sValue(body);
   // solve js challenge
   const challenge = solveChallenge(body, error.hostname);
 
@@ -153,6 +187,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
     pass,
     // eslint-disable-next-line @typescript-eslint/camelcase
     jschl_answer: challenge.answer,
+    s,
   };
   try {
     return await got(submitUrl, options);

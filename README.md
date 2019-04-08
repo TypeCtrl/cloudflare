@@ -58,3 +58,4 @@ async function main() {
 ### See Also
 - [cloudflare-scrape](https://github.com/Anorov/cloudflare-scrape) - python bypass using V8
 - [cloudscraper](https://github.com/codemanki/cloudscraper) - js cloudflare solver using [request](https://github.com/request/request)
+- [cloudflare-scrape-js2py](https://github.com/VeNoMouS/cloudflare-scrape-js2py) - python bypass

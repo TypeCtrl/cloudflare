@@ -13,5 +13,6 @@ module.exports = {
     'comma-dangle': ['error', 'always-multiline'],
     'no-mixed-operators': 0,
     '@typescript-eslint/promise-function-async': 0,
+    '@typescript-eslint/unified-signatures': 0,
   },
 };

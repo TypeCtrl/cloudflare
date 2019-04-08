@@ -1,4 +1,4 @@
-# cloudflare [![npm](https://img.shields.io/npm/v/@ctrl/cloudflare.svg?maxAge=3600)](https://www.npmjs.com/package/@ctrl/cloudflare) [![CircleCI](https://circleci.com/gh/TypeCtrl/cloudflare.svg?style=svg)](https://circleci.com/gh/TypeCtrl/cloudflare) [![coverage status](https://codecov.io/gh/typectrl/cloudflare/branch/master/graph/badge.svg)](https://codecov.io/gh/typectrl/cloudflare)
+# cloudflare scrape [![npm](https://img.shields.io/npm/v/@ctrl/cloudflare.svg?maxAge=3600)](https://www.npmjs.com/package/@ctrl/cloudflare) [![CircleCI](https://circleci.com/gh/TypeCtrl/cloudflare.svg?style=svg)](https://circleci.com/gh/TypeCtrl/cloudflare) [![coverage status](https://codecov.io/gh/typectrl/cloudflare/branch/master/graph/badge.svg)](https://codecov.io/gh/typectrl/cloudflare)
 
 > Bypass Cloudflare's anti-bot page also known as I'm Under Attack Mode
 

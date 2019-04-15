@@ -35,12 +35,13 @@ export function solveChallenge(body: string, domain: string) {
   const timeout = timeoutReg.exec(body);
   let js = timeout && timeout.length ? timeout[1] : '';
   js = js.replace(/a\.value = (.+\.toFixed\(10\);).+", r"\1/i, '$1');
+  js = js.replace(/(e\s=\sfunction\(s\)\s{[\s\S]*};)/g, '');
   js = js.replace(/\s{3,}[a-z](?: = |\.).+/g, '');
   js = js.replace(/'; \d+'/g, '');
-
   // Strip characters that could be used to exit the string context
   // These characters are not currently used in Cloudflare's arithmetic snippet
   js = js.replace(/[\n\\']/, '');
+  js = js.replace('; 121', '');
 
   if (!js.includes('toFixed')) {
     throw new Error(`Error parsing Cloudflare IUAM Javascript challenge. ${BUG_REPORT}`);
@@ -67,12 +68,22 @@ export function solveChallenge(body: string, domain: string) {
     // ignore errors
   }
 
+  const dom = `var t = "${domain}";`;
   const a = 'var a = {};';
+  const o = 'var o = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";';
+  const e = `var e = function(s) {{
+      s += "==".slice(2 - (s.length & 3));
+      var bm, r = "", r1, r2, i = 0;
+      for (; i < s.length;) {{
+          bm = o.indexOf(s.charAt(i++)) << 18 | o.indexOf(s.charAt(i++)) << 12 | (r1 = o.indexOf(s.charAt(i++))) << 6 | (r2 = o.indexOf(s.charAt(i++)));
+          r += r1 === 64 ? g(bm >> 16 & 255) : r2 === 64 ? g(bm >> 16 & 255, bm >> 8 & 255) : g(bm >> 16 & 255, bm >> 8 & 255, bm & 255);
+      }}
+      return r;
+  }};`;
   const g = 'var g = String.fromCharCode;';
   const document = `var document= {getElementById: function(x) { return {innerHTML:"${val}"};}};`;
-  const dom = `var t = "${domain}";`;
   const atob = 'var atob = function(str) {return Buffer.from(str, "base64").toString("binary");};';
-  const jsx = a + dom + atob + g + document + js;
+  const jsx = a + o + e + dom + atob + g + document + js;
   const str = vm.runInNewContext(jsx, { Buffer, g: String.fromCharCode }, { timeout: 5000 });
   // must eval javascript - potentially very unsafe
   // eslint-disable-next-line no-eval

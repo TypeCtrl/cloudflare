@@ -38,6 +38,18 @@ describe('cloudflare', () => {
     expect(challenge.ms).toBe(4000);
   });
 
+  it('should solve 2019 2', () => {
+    // s: e885b4e1d4a93b0b61b35e774509ae8893ffc3f5-1555348395-1800-AVgJfh4VVClA4mXWS90lbN3XZgES4G3zzrbRJzAKrLyms0wI/Q2rAmaAN+3VRM7d9qUfuN2bAWJ5752CYLtQp6EVzo2qy5ihe7b1/SBToJPLOuHVkSNUFozcrjR+kGSYbg==
+    // jschl_vc: 587fc2b85a3c9428804824be83d7396f
+    // pass: 1555348399.578-lFLanmqVHt
+    // jschl_answer: 10.5544338984
+    const html = fs.readFileSync(path.join(__dirname, './html/2019_2'), 'utf8');
+    const challenge = solveChallenge(html, 'rlsbb.ru');
+    // i dunno
+    expect(challenge.answer).toBe(30.8145977062);
+    expect(challenge.ms).toBe(4000);
+  });
+
   it('should spot captcha', () => {
     const html = fs.readFileSync(path.join(__dirname, './html/captcha'), 'utf8');
     expect(isCloudflareCaptcha(html)).toBe(true);

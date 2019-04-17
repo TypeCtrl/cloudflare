@@ -32,16 +32,16 @@
     "semantic-release": "cd dist && semantic-release"
   },
   "dependencies": {
-    "@types/got": "^9.4.1",
+    "@types/got": "^9.4.2",
     "buffer": "^5.2.1",
-    "delay": "^4.1.0",
+    "delay": "^4.2.0",
     "got": "^9.6.0",
     "ua-string": "^2.1.0"
   },
   "devDependencies": {
     "@types/jest": "24.0.11",
     "@types/nock": "9.3.1",
-    "@types/node": "11.13.0",
+    "@types/node": "11.13.4",
     "@types/tough-cookie": "2.3.5",
     "@types/ua-string": "2.0.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
@@ -50,14 +50,14 @@
     "eslint-config-prettier": "4.1.0",
     "eslint-config-xo-space": "0.21.0",
     "eslint-config-xo-typescript": "0.9.0",
-    "eslint-plugin-import": "2.16.0",
+    "eslint-plugin-import": "2.17.2",
     "jest": "24.7.1",
     "nock": "10.0.6",
     "rimraf": "2.6.3",
     "semantic-release": "15.13.3",
     "tough-cookie": "3.0.1",
     "ts-jest": "24.0.2",
-    "typescript": "3.4.2"
+    "typescript": "3.4.3"
   },
   "release": {
     "branch": "master"

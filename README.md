@@ -29,7 +29,7 @@ import uaString from 'ua-string';
 async function main() {
   // cookie jar required
   const cookieJar = new CookieJar();
-  const options: any = {
+  const options = {
     cookieJar,
     headers: {
       // helps to pass user-agent

@@ -39,7 +39,7 @@
     "ua-string": "^2.1.0"
   },
   "devDependencies": {
-    "@types/jest": "24.0.11",
+    "@types/jest": "24.0.12",
     "@types/nock": "9.3.1",
     "@types/node": "11.13.7",
     "@types/tough-cookie": "2.3.5",

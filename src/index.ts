@@ -21,7 +21,7 @@ export function isCloudflareChallenge(statusCode: number, headers: any, body: st
 }
 
 export function isCloudflareCaptcha(body: string) {
-  if (body.indexOf('why_captcha') !== -1 || /cdn-cgi\/l\/chk_captcha/i.test(body)) {
+  if (body.includes('why_captcha') || /cdn-cgi\/l\/chk_captcha/i.test(body)) {
     return true;
   }
 

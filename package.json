@@ -32,22 +32,22 @@
     "semantic-release": "cd dist && semantic-release"
   },
   "dependencies": {
-    "@types/got": "^9.4.3",
+    "@types/got": "^9.4.4",
     "buffer": "^5.2.1",
     "delay": "^4.2.0",
     "got": "^9.6.0",
-    "ua-string": "^2.1.0"
+    "ua-string": "^3.0.0"
   },
   "devDependencies": {
-    "@types/jest": "24.0.11",
-    "@types/nock": "9.3.1",
-    "@types/node": "11.13.7",
+    "@types/jest": "24.0.12",
+    "@types/nock": "10.0.1",
+    "@types/node": "12.0.0",
     "@types/tough-cookie": "2.3.5",
     "@types/ua-string": "2.0.0",
     "@typescript-eslint/eslint-plugin": "1.7.0",
     "@typescript-eslint/parser": "1.7.0",
     "eslint": "5.16.0",
-    "eslint-config-prettier": "4.1.0",
+    "eslint-config-prettier": "4.2.0",
     "eslint-config-xo-space": "0.21.0",
     "eslint-config-xo-typescript": "0.10.1",
     "eslint-plugin-import": "2.17.2",

@@ -20,7 +20,7 @@ Requires passing cookiejar to got. Reusing the cookiejar in subsequent requests 
 Call `catchCloudflare(err, options)` passing the error and the options used to make the request. `catchCloudflare` will rethrow if it is unable to bypass of if the error is not cloudflare related.
 
 ```ts
-import { catchCloudflare } from '../src/index';
+import { catchCloudflare } from '@ctrl/cloudflare';
 import got, { GotOptions } from 'got';
 import { CookieJar } from 'tough-cookie';
 

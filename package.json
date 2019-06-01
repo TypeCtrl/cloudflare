@@ -58,7 +58,7 @@
     "semantic-release": "15.13.12",
     "tough-cookie": "3.0.1",
     "ts-jest": "24.0.2",
-    "typescript": "3.4.5"
+    "typescript": "3.5.1"
   },
   "release": {
     "branch": "master"

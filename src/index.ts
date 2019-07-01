@@ -145,13 +145,14 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   options: any,
   attempts = 1,
 ): Promise<Response<T>> {
+  const config: any = { ...options };
   // must have body present
   if (!error.response || !error.response.body) {
     throw error;
   }
 
   // must have cookiejar
-  if (!options.cookieJar) {
+  if (!config.cookieJar) {
     throw new Error('options.cookieJar required');
   }
 
@@ -171,13 +172,13 @@ export async function catchCloudflare<T extends Buffer | string | object>(
     throw new CloudflareMaxAttemptsError(`Unable to bypass cloudflare attempts: ${attempts}`);
   }
 
-  options.headers = options.headers || {};
-  options.headers = setupHeaders(options.headers);
-  options.headers.referer = `${error.url.substring(0, error.url.length - 1)}${error.path || ''}`;
-  options.headers['cache-control'] = options.headers['cache-control'] || 'private';
-  const retry: RetryOptions = options.retry || {};
-  options.retry.statusCodes = [408, 413, 429, 500, 502, 504];
-  options.retry = retry;
+  config.headers = config.headers || {};
+  config.headers = setupHeaders(config.headers);
+  config.headers.referer = `${error.url.substring(0, error.url.length - 1)}${error.path || ''}`;
+  config.headers['cache-control'] = config.headers['cache-control'] || 'private';
+  const retry: RetryOptions = config.retry || {};
+  config.retry.statusCodes = [408, 413, 429, 500, 502, 504];
+  config.retry = retry;
 
   // get form field values
   const jschlVc = jschlValue(body);
@@ -191,8 +192,8 @@ export async function catchCloudflare<T extends Buffer | string | object>(
 
   // make request with answer
   const submitUrl = `${error.protocol}//${error.hostname}`;
-  options.path = '/cdn-cgi/l/chk_jschl';
-  options.query = {
+  config.path = '/cdn-cgi/l/chk_jschl';
+  config.query = {
     // eslint-disable-next-line @typescript-eslint/camelcase
     jschl_vc: jschlVc,
     pass,
@@ -201,8 +202,8 @@ export async function catchCloudflare<T extends Buffer | string | object>(
     s,
   };
   try {
-    return await got(submitUrl, options);
+    return await got(submitUrl, config);
   } catch (err) {
-    return catchCloudflare(err, options, attempts + 1);
+    return catchCloudflare(err, config, attempts + 1);
   }
 }

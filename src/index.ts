@@ -1,8 +1,10 @@
-import got, { Response, RetryOptions } from 'got';
+import { Buffer } from 'buffer';
+import crypto from 'crypto';
 import delay from 'delay';
+import got, { Response, RetryOptions } from 'got';
+import https from 'https';
 import uaString from 'ua-string';
 import vm from 'vm';
-import { Buffer } from 'buffer';
 
 const BUG_REPORT = `\
 Cloudflare may have changed their technique, or there may be a bug in the script.
@@ -201,6 +203,15 @@ export async function catchCloudflare<T extends Buffer | string | object>(
     jschl_answer: challenge.answer,
     s,
   };
+
+  if (!config.agent) {
+    config.agent = {
+      https: new https.Agent({
+        ciphers: crypto.constants.defaultCipherList + ':!ECDHE+SHA:!AES128-SHA',
+      }),
+    };
+  }
+
   try {
     return await got(submitUrl, config);
   } catch (err) {

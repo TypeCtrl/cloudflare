@@ -8,7 +8,6 @@
     "esModuleInterop": true,
     "strict": true,
     "noImplicitAny": false,
-    "noUnusedLocals": true,
     "declaration": true,
     "sourceMap": true,
     "inlineSources": true,

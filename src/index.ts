@@ -159,14 +159,15 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   }
 
   const { body } = error.response;
-  // error is not cloudflare related - rethrow
-  if (!isCloudflareChallenge(error.response.statusCode, error.response.headers, body)) {
-    throw error;
-  }
 
   // recaptcha captcha encountered
   if (isCloudflareCaptcha(body)) {
     throw new CaptchaError('Cloudflare captcha encountered');
+  }
+
+  // error is not cloudflare related - rethrow
+  if (!isCloudflareChallenge(error.response.statusCode, error.response.headers, body)) {
+    throw error;
   }
 
   // max attempt error

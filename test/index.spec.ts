@@ -56,6 +56,11 @@ describe('cloudflare', () => {
     expect(isCloudflareCaptcha(html)).toBe(true);
   });
 
+  it('should spot captcha 2019', () => {
+    const html = fs.readFileSync(path.join(__dirname, './html/2019_captcha_1'), 'utf8');
+    expect(isCloudflareCaptcha(html)).toBe(true);
+  });
+
   it('should catch cloudflare page and solve challenge 2018 1', async () => {
     // failed request blocked by cloudflare
     const html = fs.readFileSync(path.join(__dirname, './html/2018_1'), 'utf8');

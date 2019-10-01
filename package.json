@@ -53,7 +53,7 @@
     "eslint-config-xo-typescript": "0.18.0",
     "eslint-plugin-import": "2.18.2",
     "jest": "24.9.0",
-    "nock": "11.3.4",
+    "nock": "11.3.5",
     "semantic-release": "15.13.24",
     "tough-cookie": "3.0.1",
     "ts-jest": "24.1.0",

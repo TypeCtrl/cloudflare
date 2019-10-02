@@ -2,7 +2,7 @@
 
 > Bypass Cloudflare's anti-bot page also known as I'm Under Attack Mode
 
-Based on python library [clouflare-scrape](https://github.com/Anorov/cloudflare-scrape)
+Based on python library [cloudflare-scrape](https://github.com/Anorov/cloudflare-scrape)
 
 The anti-bot page requires a JS obfuscated math problem and http form submission after a setTimeout. The setTimeout is required, so bypassing cloudflare takes about 6 seconds.
 

@@ -2,21 +2,26 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: npm-install
-          command: npm install
+          command: npm ci
       - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
-            - ./node_modules
+            - ~/.npm
       - run:
           name: test
           command: npm run test:ci
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: "./reports"
+            JEST_JUNIT_OUTPUT_NAME: "test-results.xml"
+      - store_test_results:
+          path: ./reports
       - run:
           name: lint
           command: npm run lint
@@ -29,7 +34,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       - run: npm install
       - run: npm run build
       - run: npm run semantic-release

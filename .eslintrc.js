@@ -12,5 +12,7 @@ module.exports = {
     'capitalized-comments': 0,
     '@typescript-eslint/no-explicit-any': 0,
     'comma-dangle': ['error', 'always-multiline'],
+    '@typescript-eslint/strict-boolean-expressions': 0,
+    '@typescript-eslint/no-unnecessary-condition': 0,
   },
 };

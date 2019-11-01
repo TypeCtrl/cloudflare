@@ -54,7 +54,7 @@
     "jest": "24.9.0",
     "jest-junit": "8.0.0",
     "nock": "11.7.0",
-    "semantic-release": "15.13.24",
+    "semantic-release": "15.13.28",
     "tough-cookie": "3.0.1",
     "ts-jest": "24.1.0",
     "typescript": "3.6.3"

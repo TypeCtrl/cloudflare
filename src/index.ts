@@ -225,13 +225,14 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   };
 
   if (method.toUpperCase() === 'GET') {
+    config.method = 'GET';
     config.path = '/cdn-cgi/l/chk_jschl';
     payload.s = s;
     config.query = payload;
-    config.method = 'GET';
   } else {
+    config.method = 'POST';
     const queryMatch = body.match(/id="challenge-form" action="(.+?)" method="(.+?)"/);
-    config.path = queryMatch[1];
+    config.query = queryMatch[1];
     const params = new URLSearchParams();
     for (const entry of Object.entries(payload)) {
       params.append(entry[0], entry[1] as string);
@@ -242,11 +243,8 @@ export async function catchCloudflare<T extends Buffer | string | object>(
       ...config.headers,
       'content-type': 'application/x-www-form-urlencoded',
     };
-    config.method = 'POST';
+    config.followRedirect = true;
   }
-
-  // console.log(new FormData(payload).getHeaders());
-  // console.log(config);
 
   if (!config.agent) {
     config.agent = {

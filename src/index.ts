@@ -5,6 +5,7 @@ import got, { Response, RetryOptions } from 'got';
 import https from 'https';
 import uaString from 'ua-string';
 import vm from 'vm';
+import { URLSearchParams } from 'url';
 
 const BUG_REPORT = `\
 Cloudflare may have changed their technique, or there may be a bug in the script.
@@ -116,6 +117,23 @@ export function sValue(body: string) {
   return s && s.length ? s[1] : '';
 }
 
+export function getRValue(body: string): object {
+  // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
+  const match = body.match(/name="(.+?)" value="(.+?)"/);
+  if (match) {
+    const hiddenInputName = match[1];
+    return { [hiddenInputName]: match[2] };
+  }
+
+  return {};
+}
+
+export function getMethod(body: string) {
+  const methodReg = /method="(.+?)"/g;
+  const s = methodReg.exec(body);
+  return s && s.length ? s[1] : 'GET';
+}
+
 /**
  * sets headers.accept and headers.user-agent if not exist
  * @param headers existing headers
@@ -187,6 +205,8 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   const jschlVc = jschlValue(body);
   const pass = passValue(body);
   const s = sValue(body);
+  const rValue = getRValue(body);
+  const method = getMethod(body);
   // solve js challenge
   const challenge = solveChallenge(body, error.hostname);
 
@@ -195,15 +215,36 @@ export async function catchCloudflare<T extends Buffer | string | object>(
 
   // make request with answer
   const submitUrl = `${error.protocol}//${error.hostname}`;
-  config.path = '/cdn-cgi/l/chk_jschl';
-  config.query = {
+  const payload: any = {
+    ...rValue,
     // eslint-disable-next-line @typescript-eslint/camelcase
     jschl_vc: jschlVc,
     pass,
     // eslint-disable-next-line @typescript-eslint/camelcase
     jschl_answer: challenge.answer,
-    s,
   };
+
+  if (method.toUpperCase() === 'GET') {
+    config.method = 'GET';
+    config.path = '/cdn-cgi/l/chk_jschl';
+    payload.s = s;
+    config.query = payload;
+  } else {
+    config.method = 'POST';
+    const queryMatch = body.match(/id="challenge-form" action="(.+?)" method="(.+?)"/);
+    config.query = queryMatch[1];
+    const params = new URLSearchParams();
+    for (const entry of Object.entries(payload)) {
+      params.append(entry[0], entry[1] as string);
+    }
+
+    config.body = params.toString();
+    config.headers = {
+      ...config.headers,
+      'content-type': 'application/x-www-form-urlencoded',
+    };
+    config.followRedirect = true;
+  }
 
   if (!config.agent) {
     config.agent = {
@@ -216,6 +257,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   try {
     return await got(submitUrl, config);
   } catch (err) {
-    return catchCloudflare(err, config, attempts + 1);
+    // eslint-disable-next-line no-return-await
+    return await catchCloudflare(err, config, attempts + 1);
   }
 }

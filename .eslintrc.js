@@ -14,5 +14,7 @@ module.exports = {
     'comma-dangle': ['error', 'always-multiline'],
     '@typescript-eslint/strict-boolean-expressions': 0,
     '@typescript-eslint/no-unnecessary-condition': 0,
+    '@typescript-eslint/prefer-optional-chain': 0,
+    '@typescript-eslint/restrict-template-expressions': 0,
   },
 };

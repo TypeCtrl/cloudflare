@@ -6,7 +6,7 @@ import { CookieJar } from 'tough-cookie';
 import uaString from 'ua-string';
 import delay from 'delay';
 
-import { catchCloudflare, isCloudflareCaptcha, solveChallenge } from '../src/index';
+import { catchCloudflare, isCloudflareCaptcha, solveChallenge, getRValue } from '../src/index';
 
 // disable timeout for tests
 jest.mock('delay');
@@ -143,7 +143,9 @@ describe('cloudflare', () => {
       },
     })
       // not sure why this wouldn't work as a query
-      .get('/cdn-cgi/l/chk_jschl?jschl_vc=1e569d1d635fbd9058c76a0603a48398&pass=1554683890.976-BCVIl1%2BamT&jschl_answer=-53.2834707752&s=952a9c14c8ff41d0a7e2536916d4c48bbe8b614c-1554683886-1800-AUYflGr0kMAOZ6sitOwGdIjGxpLVXarkUQV6c5NBF3iZnTTud7cOG%2BszYmJXI404pK4OGNJ%2BqJMQnYig71bNf08dVYaC7FwFYhvDBgfdcTQNMCjDBoMlkFI61kchaoXU%2FA%3D%3D')
+      .get(
+        '/cdn-cgi/l/chk_jschl?jschl_vc=1e569d1d635fbd9058c76a0603a48398&pass=1554683890.976-BCVIl1%2BamT&jschl_answer=-53.2834707752&s=952a9c14c8ff41d0a7e2536916d4c48bbe8b614c-1554683886-1800-AUYflGr0kMAOZ6sitOwGdIjGxpLVXarkUQV6c5NBF3iZnTTud7cOG%2BszYmJXI404pK4OGNJ%2BqJMQnYig71bNf08dVYaC7FwFYhvDBgfdcTQNMCjDBoMlkFI61kchaoXU%2FA%3D%3D',
+      )
       .reply(302, '', {
         Location: 'http://torrentz2.eu/search?f=zoolander',
         server: 'cloudflare',
@@ -189,5 +191,72 @@ describe('cloudflare', () => {
   it('should catch non-puzzle', () => {
     const html = '<div>Hello</div>';
     expect(() => solveChallenge(html, 'example-site.dev')).toThrow();
+  });
+
+  it('should get r value', () => {
+    const html = fs.readFileSync(path.join(__dirname, './html/2019_3'), 'utf8');
+    const result = getRValue(html);
+    expect(result).toHaveProperty(
+      'r',
+      '6f1075a4b86ca26cfe982f36050e92bdfb709f75-1575008528-0-ATm//i2nsd2Iv5QIdr90QBJ07vIYc7kvjbdrqrCAPF2wjQ6WenG6ZErJOFqWISFxtz03BZY5YeNKnbv8jS6II7ZjnyPzbFRQNjNyf/oAbncGR3ZeWa2RKfEjG5SzrhUjNLwH+KucK29s3kz2UoSCNN9jOLirh0kCkQIR5B0NjOI8YuK5RE9US9UTAgEvEQmo7lgSDmmLY/LgHC3HyNuDUg/DRAuU+r/n9zlk4pfL8RpV80mxrG7Z8sRJ+skTuvxHeN7zr7K4IIsjnpz5ccy/nI8IxiNuQQ5+JR/8ENXCVY1S1UHMPlxIYPldJwpYTVTHMoQXs2ZDKRMsBECy+j/YJllGLtbH/IfdTbor1qih9BYpaQF9dyrp+Usqg5w5o4SgAcon+LhJlADUfxhVy5CagpPXIlcDBJnSi31RRUMFl6aLI4BN7KzWz/6yx709MjezOEz1KndXO+N5WRpDWGp9oasXiDQcRtjRYpjlgBUpzhrb/MYlQ9C2Z773Ti70zM50Y1x3JDFUnjh4SCqsR6Hcu69KcP4FhCH/oFjrTRkrfcWUHcA1VGqMLIdhpMzJRGkkpps6qMFAEcdsILAh5Q9PSdYkGAYGaxNdnOgyXVPloY/dS2bLXP9QOLs+Twqpi4eSve73rSq0+ypnrnA0pmgwc/BIcA3PsSoGSmVz+AOoudAOWQyBsIPbT0Vp0x55ABPMeuYefvGI6RvQ5yEIKBRA8VFkIn/vBjD/b/dasSskb6UduiGrJ8f+OZYRnrRvXF/RQBNobs2c4UZLasbKYf8TZ0nY5P9KNgTilOeMHXtJaPJ6nfWJE7dZea1MHFm2uvO9Dl8ItsF71AcreEOcuPCf9Yf/Kj3SY84WZYAwiYxHKgIAtbLCNpGjeTWgTm5n5fCXRTehhjMZcQihvBOE4OHdrZlEtTcFZme9ELVCoBwV6FV+I+cHr7nlzYpHya6oqacfKu0jE4u9fSEoJVzPLb2oWoMevkoyoreYmvRgFPDvlISuwM5PBpOLB1PgwXY8LumHeV7cQQePlyl9pyGsevTRMgTyJeKkwECyAZjbreSeDV1BdeFd+YZzls55aQmosqJBkCGtDSVvjB7gf+hiS9tSxUAse4yOm7ayYv/dyVBvMY6R8Sjmd0nPYyHzrEhFDFgbeadYnQyt0LDIaxT8RUphIZ/PQl5BndMWVX9zlgLAlNrawnldPkOtL+WD6yuvlbytis1OT5XfhozJTYyPKrg7sen2U8g9Mdsss9Yhj3X9FW6qBrx9s1eN5qrOx97Cf56tqS3OQg1q3jG5Ki7wtfnsdyZAEvzm/gREW69nP2O03EbLkeoRhBPghOZa/dR0n2nKTXo5dhpaGdVstQjToWR50+wFflcMdW7mYg/kwcLeJGP/MYo/u8WyRwRWnP+Al4/ONEOSCvP8dTS7S6PjWWfMl4HMJuOW5GyN7ndhzxzSmreutOig27Fz0KCJprHqgKhXKfuji1ZLYDeWtVHuWKnBQSWgyBfMWpd/gR/bdeYdRzIO1Hjgl5SbMskfKkgJMSqfS1i3v+y/DvbAEqYSQ7aoYDGputMZkBiKeE6AAsBtsV41',
+    );
+  });
+
+  it('should catch cloudflare page and solve challenge 2019 3', async () => {
+    // failed request blocked by cloudflare
+    const html = fs.readFileSync(path.join(__dirname, './html/2019_3'), 'utf8');
+    const f = nock('http://example.com')
+      .get('/search')
+      .reply(503, html, {
+        server: 'cloudflare',
+      });
+
+    const success = '<h1>Hello</h1>';
+    const n = nock('http://example.com', {
+      reqheaders: {
+        referer: 'http://example.com/search',
+      },
+    })
+      // not sure how to match query params
+      .post(
+        '/search?/',
+        {
+          r:
+            '6f1075a4b86ca26cfe982f36050e92bdfb709f75-1575008528-0-ATm//i2nsd2Iv5QIdr90QBJ07vIYc7kvjbdrqrCAPF2wjQ6WenG6ZErJOFqWISFxtz03BZY5YeNKnbv8jS6II7ZjnyPzbFRQNjNyf/oAbncGR3ZeWa2RKfEjG5SzrhUjNLwH+KucK29s3kz2UoSCNN9jOLirh0kCkQIR5B0NjOI8YuK5RE9US9UTAgEvEQmo7lgSDmmLY/LgHC3HyNuDUg/DRAuU+r/n9zlk4pfL8RpV80mxrG7Z8sRJ+skTuvxHeN7zr7K4IIsjnpz5ccy/nI8IxiNuQQ5+JR/8ENXCVY1S1UHMPlxIYPldJwpYTVTHMoQXs2ZDKRMsBECy+j/YJllGLtbH/IfdTbor1qih9BYpaQF9dyrp+Usqg5w5o4SgAcon+LhJlADUfxhVy5CagpPXIlcDBJnSi31RRUMFl6aLI4BN7KzWz/6yx709MjezOEz1KndXO+N5WRpDWGp9oasXiDQcRtjRYpjlgBUpzhrb/MYlQ9C2Z773Ti70zM50Y1x3JDFUnjh4SCqsR6Hcu69KcP4FhCH/oFjrTRkrfcWUHcA1VGqMLIdhpMzJRGkkpps6qMFAEcdsILAh5Q9PSdYkGAYGaxNdnOgyXVPloY/dS2bLXP9QOLs+Twqpi4eSve73rSq0+ypnrnA0pmgwc/BIcA3PsSoGSmVz+AOoudAOWQyBsIPbT0Vp0x55ABPMeuYefvGI6RvQ5yEIKBRA8VFkIn/vBjD/b/dasSskb6UduiGrJ8f+OZYRnrRvXF/RQBNobs2c4UZLasbKYf8TZ0nY5P9KNgTilOeMHXtJaPJ6nfWJE7dZea1MHFm2uvO9Dl8ItsF71AcreEOcuPCf9Yf/Kj3SY84WZYAwiYxHKgIAtbLCNpGjeTWgTm5n5fCXRTehhjMZcQihvBOE4OHdrZlEtTcFZme9ELVCoBwV6FV+I+cHr7nlzYpHya6oqacfKu0jE4u9fSEoJVzPLb2oWoMevkoyoreYmvRgFPDvlISuwM5PBpOLB1PgwXY8LumHeV7cQQePlyl9pyGsevTRMgTyJeKkwECyAZjbreSeDV1BdeFd+YZzls55aQmosqJBkCGtDSVvjB7gf+hiS9tSxUAse4yOm7ayYv/dyVBvMY6R8Sjmd0nPYyHzrEhFDFgbeadYnQyt0LDIaxT8RUphIZ/PQl5BndMWVX9zlgLAlNrawnldPkOtL+WD6yuvlbytis1OT5XfhozJTYyPKrg7sen2U8g9Mdsss9Yhj3X9FW6qBrx9s1eN5qrOx97Cf56tqS3OQg1q3jG5Ki7wtfnsdyZAEvzm/gREW69nP2O03EbLkeoRhBPghOZa/dR0n2nKTXo5dhpaGdVstQjToWR50+wFflcMdW7mYg/kwcLeJGP/MYo/u8WyRwRWnP+Al4/ONEOSCvP8dTS7S6PjWWfMl4HMJuOW5GyN7ndhzxzSmreutOig27Fz0KCJprHqgKhXKfuji1ZLYDeWtVHuWKnBQSWgyBfMWpd/gR/bdeYdRzIO1Hjgl5SbMskfKkgJMSqfS1i3v+y/DvbAEqYSQ7aoYDGputMZkBiKeE6AAsBtsV41',
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          jschl_vc: '37f5c67a82dd9cd6b9239bd185a21e8b',
+          pass: '1575008532.865-SJzufpXp5T',
+          // jschl_answer: 11.0424687495,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          jschl_answer: 14.0424687495,
+        },
+      )
+      .reply(200, success);
+
+    const cookieJar = new CookieJar();
+    const options: GotOptions<null> = {
+      path: '/search',
+      retry: {
+        retries: 0,
+        statusCodes: [408, 413, 429, 500, 502, 504],
+      },
+      cookieJar,
+      headers: { 'user-agent': uaString },
+    };
+
+    let res: any;
+    try {
+      res = await got.get('http://example.com', options);
+      // always will throw
+      expect(false).toBe(true);
+    } catch (err) {
+      // first request is fufilled
+      expect(f.isDone()).toBe(true);
+      // catch our cloudflare error
+      res = await catchCloudflare(err, options);
+    }
+
+    expect(res.body).toBe(success);
+    expect(n.isDone()).toBe(true);
   });
 });

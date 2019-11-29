@@ -1,0 +1,102 @@
+
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Just a moment...</title>
+  <style type="text/css">
+    html, body {width: 100%; height: 100%; margin: 0; padding: 0;}
+    body {background-color: #ffffff; font-family: Helvetica, Arial, sans-serif; font-size: 100%;}
+    h1 {font-size: 1.5em; color: #404040; text-align: center;}
+    p {font-size: 1em; color: #404040; text-align: center; margin: 10px 0 0 0;}
+    #spinner {margin: 0 auto 30px auto; display: block;}
+    .attribution {margin-top: 20px;}
+    @-webkit-keyframes bubbles { 33%: { -webkit-transform: translateY(10px); transform: translateY(10px); } 66% { -webkit-transform: translateY(-10px); transform: translateY(-10px); } 100% { -webkit-transform: translateY(0); transform: translateY(0); } }
+    @keyframes bubbles { 33%: { -webkit-transform: translateY(10px); transform: translateY(10px); } 66% { -webkit-transform: translateY(-10px); transform: translateY(-10px); } 100% { -webkit-transform: translateY(0); transform: translateY(0); } }
+    .bubbles { background-color: #404040; width:15px; height: 15px; margin:2px; border-radius:100%; -webkit-animation:bubbles 0.6s 0.07s infinite ease-in-out; animation:bubbles 0.6s 0.07s infinite ease-in-out; -webkit-animation-fill-mode:both; animation-fill-mode:both; display:inline-block; }
+  </style>
+
+    <script type="text/javascript">
+  //<![CDATA[
+  (function(){
+    var a = function() {try{return !!window.addEventListener} catch(e) {return !1} },
+    b = function(b, c) {a() ? document.addEventListener("DOMContentLoaded", b, c) : document.attachEvent("onreadystatechange", b)};
+    b(function(){
+      var a = document.getElementById('cf-content');a.style.display = 'block';
+      setTimeout(function(){
+        var s,t,o,p,b,r,e,a,k,i,n,g,f, iZebXUL={"hvZueinwMvMs":+((!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+[])+(!+[]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![])+(+[])+(!+[]+!![]+!![]+!![])+(+!![])+(!+[]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]))/+((!+[]+!![]+!![]+!![]+!![]+[])+(+[])+(!+[]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![])+(!+[]+!![]))};
+        g = String.fromCharCode;
+        o = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        e = function(s) {
+          s += "==".slice(2 - (s.length & 3));
+          var bm, r = "", r1, r2, i = 0;
+          for (; i < s.length;) {
+              bm = o.indexOf(s.charAt(i++)) << 18 | o.indexOf(s.charAt(i++)) << 12
+                      | (r1 = o.indexOf(s.charAt(i++))) << 6 | (r2 = o.indexOf(s.charAt(i++)));
+              r += r1 === 64 ? g(bm >> 16 & 255)
+                      : r2 === 64 ? g(bm >> 16 & 255, bm >> 8 & 255)
+                      : g(bm >> 16 & 255, bm >> 8 & 255, bm & 255);
+          }
+          return r;
+        };
+        t = document.createElement('div');
+        t.innerHTML="<a href='/'>x</a>";
+        t = t.firstChild.href;r = t.match(/https?:\/\//)[0];
+        t = t.substr(r.length); t = t.substr(0,t.length-1);
+        a = document.getElementById('jschl-answer');
+        f = document.getElementById('challenge-form');
+        ;iZebXUL.hvZueinwMvMs*=+((!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+[])+(+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![])+(+[])+(!+[]+!![]+!![]+!![])+(!+[]+!![])+(!+[]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]))/+((!+[]+!![]+!![]+!![]+!![]+!![]+[])+(!+[]+!![]+!![])+(!+[]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]));iZebXUL.hvZueinwMvMs*=+((!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+[])+(+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![])+(+[])+(!+[]+!![]+!![]+!![])+(!+[]+!![])+(!+[]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]))/+((!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+[])+(!+[]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![])+(+[])+(!+[]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![]));iZebXUL.hvZueinwMvMs+=+((!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+[])+(!+[]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![])+(+[])+(!+[]+!![]+!![]+!![])+(+!![])+(!+[]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]))/+((!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+[])+(!+[]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![])+(+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![])+(!+[]+!![])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]));a.value = (+iZebXUL.hvZueinwMvMs + t.length).toFixed(10); '; 121'
+        f.action += location.hash;
+        f.submit();
+      }, 4000);
+    }, false);
+  })();
+  //]]>
+</script>
+
+
+</head>
+<body>
+  <table width="100%" height="100%" cellpadding="20">
+    <tr>
+      <td align="center" valign="middle">
+          <div class="cf-browser-verification cf-im-under-attack">
+  <noscript><h1 data-translate="turn_on_js" style="color:#bd2426;">Please turn JavaScript on and reload the page.</h1></noscript>
+  <div id="cf-content" style="display:none">
+
+    <div>
+      <div class="bubbles"></div>
+      <div class="bubbles"></div>
+      <div class="bubbles"></div>
+    </div>
+    <h1><span data-translate="checking_browser">Checking your browser before accessing</span> rlsbb.ru.</h1>
+
+    <p data-translate="process_is_automatic">This process is automatic. Your browser will redirect to your requested content shortly.</p>
+    <p data-translate="allow_5_secs">Please allow up to 5 seconds&hellip;</p>
+  </div>
+
+  <form id="challenge-form" action="/?__cf_chl_jschl_tk__=f539ef78a6f8f16e2bbd6f5ac58521fac384f768-1575008528-0-AWIaFifdVJx1IsVKH1F3nFTl3hj41-_-hUwBdgc71_bOu_193CjxrjpPl-UnZnGjYe2OU_7y64hQ_cptYoZ-oA2BnXQL_J9QlV_Cm-BXF4J16nH-OVR7TVRI4Z1ZqAkRKcmUBuaZxms22Eb6dRzqukKDOMkrer9RVjPv0T1uE_8TZ4zm0ln3Bg8kY9jf9NEHfa5zLtlC5UuA_k89Kfl76dOSVPipJoZgc1UG_1-jdL_GfSbVYicODVgOVUaJb211nAcmK0lFZO3Gretccn_SkeE" method="POST" enctype="application/x-www-form-urlencoded">
+    <input type="hidden" name="r" value="6f1075a4b86ca26cfe982f36050e92bdfb709f75-1575008528-0-ATm//i2nsd2Iv5QIdr90QBJ07vIYc7kvjbdrqrCAPF2wjQ6WenG6ZErJOFqWISFxtz03BZY5YeNKnbv8jS6II7ZjnyPzbFRQNjNyf/oAbncGR3ZeWa2RKfEjG5SzrhUjNLwH+KucK29s3kz2UoSCNN9jOLirh0kCkQIR5B0NjOI8YuK5RE9US9UTAgEvEQmo7lgSDmmLY/LgHC3HyNuDUg/DRAuU+r/n9zlk4pfL8RpV80mxrG7Z8sRJ+skTuvxHeN7zr7K4IIsjnpz5ccy/nI8IxiNuQQ5+JR/8ENXCVY1S1UHMPlxIYPldJwpYTVTHMoQXs2ZDKRMsBECy+j/YJllGLtbH/IfdTbor1qih9BYpaQF9dyrp+Usqg5w5o4SgAcon+LhJlADUfxhVy5CagpPXIlcDBJnSi31RRUMFl6aLI4BN7KzWz/6yx709MjezOEz1KndXO+N5WRpDWGp9oasXiDQcRtjRYpjlgBUpzhrb/MYlQ9C2Z773Ti70zM50Y1x3JDFUnjh4SCqsR6Hcu69KcP4FhCH/oFjrTRkrfcWUHcA1VGqMLIdhpMzJRGkkpps6qMFAEcdsILAh5Q9PSdYkGAYGaxNdnOgyXVPloY/dS2bLXP9QOLs+Twqpi4eSve73rSq0+ypnrnA0pmgwc/BIcA3PsSoGSmVz+AOoudAOWQyBsIPbT0Vp0x55ABPMeuYefvGI6RvQ5yEIKBRA8VFkIn/vBjD/b/dasSskb6UduiGrJ8f+OZYRnrRvXF/RQBNobs2c4UZLasbKYf8TZ0nY5P9KNgTilOeMHXtJaPJ6nfWJE7dZea1MHFm2uvO9Dl8ItsF71AcreEOcuPCf9Yf/Kj3SY84WZYAwiYxHKgIAtbLCNpGjeTWgTm5n5fCXRTehhjMZcQihvBOE4OHdrZlEtTcFZme9ELVCoBwV6FV+I+cHr7nlzYpHya6oqacfKu0jE4u9fSEoJVzPLb2oWoMevkoyoreYmvRgFPDvlISuwM5PBpOLB1PgwXY8LumHeV7cQQePlyl9pyGsevTRMgTyJeKkwECyAZjbreSeDV1BdeFd+YZzls55aQmosqJBkCGtDSVvjB7gf+hiS9tSxUAse4yOm7ayYv/dyVBvMY6R8Sjmd0nPYyHzrEhFDFgbeadYnQyt0LDIaxT8RUphIZ/PQl5BndMWVX9zlgLAlNrawnldPkOtL+WD6yuvlbytis1OT5XfhozJTYyPKrg7sen2U8g9Mdsss9Yhj3X9FW6qBrx9s1eN5qrOx97Cf56tqS3OQg1q3jG5Ki7wtfnsdyZAEvzm/gREW69nP2O03EbLkeoRhBPghOZa/dR0n2nKTXo5dhpaGdVstQjToWR50+wFflcMdW7mYg/kwcLeJGP/MYo/u8WyRwRWnP+Al4/ONEOSCvP8dTS7S6PjWWfMl4HMJuOW5GyN7ndhzxzSmreutOig27Fz0KCJprHqgKhXKfuji1ZLYDeWtVHuWKnBQSWgyBfMWpd/gR/bdeYdRzIO1Hjgl5SbMskfKkgJMSqfS1i3v+y/DvbAEqYSQ7aoYDGputMZkBiKeE6AAsBtsV41"></input>
+    <input type="hidden" name="jschl_vc" value="37f5c67a82dd9cd6b9239bd185a21e8b"/>
+    <input type="hidden" name="pass" value="1575008532.865-SJzufpXp5T"/>
+    <input type="hidden" id="jschl-answer" name="jschl_answer"/>
+  </form>
+
+</div>
+
+
+          <div class="attribution">
+            <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=iuam" target="_blank" style="font-size: 12px;">DDoS protection by Cloudflare</a>
+            <br>
+            Ray ID: 53d27c495dc96bfc
+          </div>
+      </td>
+
+    </tr>
+  </table>
+</body>
+</html>

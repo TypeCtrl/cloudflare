@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import fs from 'fs';
 import got from 'got';
 import nock from 'nock';
 import path from 'path';
 import { CookieJar } from 'tough-cookie';
-import uaString from 'ua-string';
 import delay from 'delay';
 
 import { catchCloudflare, isCloudflareCaptcha, solveChallenge, getRValue } from '../src/index';
@@ -83,10 +83,8 @@ describe('cloudflare', () => {
     })
       .get('/cdn-cgi/l/chk_jschl')
       .query({
-        // eslint-disable-next-line @typescript-eslint/camelcase
         jschl_vc: '427c2b1cd4fba29608ee81b200e94bfa',
         pass: '1543827239.915-44n9IE20mS',
-        // eslint-disable-next-line @typescript-eslint/camelcase
         jschl_answer: '5.66734594',
         s: '',
       })
@@ -113,7 +111,6 @@ describe('cloudflare', () => {
         statusCodes: [408, 413, 429, 500, 502, 504],
       },
       cookieJar,
-      headers: { 'user-agent': uaString },
     };
 
     let res: any;
@@ -175,7 +172,6 @@ describe('cloudflare', () => {
         statusCodes: [408, 413, 429, 500, 502, 504],
       },
       cookieJar,
-      headers: { 'user-agent': uaString },
     };
 
     let res: any;
@@ -224,20 +220,20 @@ describe('cloudflare', () => {
         referer: 'http://example.com/search',
       },
     })
-      // not sure how to match query params
       .post(
-        '/search?/',
+        '/search',
         {
           r:
             '6f1075a4b86ca26cfe982f36050e92bdfb709f75-1575008528-0-ATm//i2nsd2Iv5QIdr90QBJ07vIYc7kvjbdrqrCAPF2wjQ6WenG6ZErJOFqWISFxtz03BZY5YeNKnbv8jS6II7ZjnyPzbFRQNjNyf/oAbncGR3ZeWa2RKfEjG5SzrhUjNLwH+KucK29s3kz2UoSCNN9jOLirh0kCkQIR5B0NjOI8YuK5RE9US9UTAgEvEQmo7lgSDmmLY/LgHC3HyNuDUg/DRAuU+r/n9zlk4pfL8RpV80mxrG7Z8sRJ+skTuvxHeN7zr7K4IIsjnpz5ccy/nI8IxiNuQQ5+JR/8ENXCVY1S1UHMPlxIYPldJwpYTVTHMoQXs2ZDKRMsBECy+j/YJllGLtbH/IfdTbor1qih9BYpaQF9dyrp+Usqg5w5o4SgAcon+LhJlADUfxhVy5CagpPXIlcDBJnSi31RRUMFl6aLI4BN7KzWz/6yx709MjezOEz1KndXO+N5WRpDWGp9oasXiDQcRtjRYpjlgBUpzhrb/MYlQ9C2Z773Ti70zM50Y1x3JDFUnjh4SCqsR6Hcu69KcP4FhCH/oFjrTRkrfcWUHcA1VGqMLIdhpMzJRGkkpps6qMFAEcdsILAh5Q9PSdYkGAYGaxNdnOgyXVPloY/dS2bLXP9QOLs+Twqpi4eSve73rSq0+ypnrnA0pmgwc/BIcA3PsSoGSmVz+AOoudAOWQyBsIPbT0Vp0x55ABPMeuYefvGI6RvQ5yEIKBRA8VFkIn/vBjD/b/dasSskb6UduiGrJ8f+OZYRnrRvXF/RQBNobs2c4UZLasbKYf8TZ0nY5P9KNgTilOeMHXtJaPJ6nfWJE7dZea1MHFm2uvO9Dl8ItsF71AcreEOcuPCf9Yf/Kj3SY84WZYAwiYxHKgIAtbLCNpGjeTWgTm5n5fCXRTehhjMZcQihvBOE4OHdrZlEtTcFZme9ELVCoBwV6FV+I+cHr7nlzYpHya6oqacfKu0jE4u9fSEoJVzPLb2oWoMevkoyoreYmvRgFPDvlISuwM5PBpOLB1PgwXY8LumHeV7cQQePlyl9pyGsevTRMgTyJeKkwECyAZjbreSeDV1BdeFd+YZzls55aQmosqJBkCGtDSVvjB7gf+hiS9tSxUAse4yOm7ayYv/dyVBvMY6R8Sjmd0nPYyHzrEhFDFgbeadYnQyt0LDIaxT8RUphIZ/PQl5BndMWVX9zlgLAlNrawnldPkOtL+WD6yuvlbytis1OT5XfhozJTYyPKrg7sen2U8g9Mdsss9Yhj3X9FW6qBrx9s1eN5qrOx97Cf56tqS3OQg1q3jG5Ki7wtfnsdyZAEvzm/gREW69nP2O03EbLkeoRhBPghOZa/dR0n2nKTXo5dhpaGdVstQjToWR50+wFflcMdW7mYg/kwcLeJGP/MYo/u8WyRwRWnP+Al4/ONEOSCvP8dTS7S6PjWWfMl4HMJuOW5GyN7ndhzxzSmreutOig27Fz0KCJprHqgKhXKfuji1ZLYDeWtVHuWKnBQSWgyBfMWpd/gR/bdeYdRzIO1Hjgl5SbMskfKkgJMSqfS1i3v+y/DvbAEqYSQ7aoYDGputMZkBiKeE6AAsBtsV41',
-          // eslint-disable-next-line @typescript-eslint/camelcase
           jschl_vc: '37f5c67a82dd9cd6b9239bd185a21e8b',
           pass: '1575008532.865-SJzufpXp5T',
           // jschl_answer: 11.0424687495,
-          // eslint-disable-next-line @typescript-eslint/camelcase
           jschl_answer: 14.0424687495,
         },
       )
+      .query({
+        __cf_chl_jschl_tk__: 'f539ef78a6f8f16e2bbd6f5ac58521fac384f768-1575008528-0-AWIaFifdVJx1IsVKH1F3nFTl3hj41-_-hUwBdgc71_bOu_193CjxrjpPl-UnZnGjYe2OU_7y64hQ_cptYoZ-oA2BnXQL_J9QlV_Cm-BXF4J16nH-OVR7TVRI4Z1ZqAkRKcmUBuaZxms22Eb6dRzqukKDOMkrer9RVjPv0T1uE_8TZ4zm0ln3Bg8kY9jf9NEHfa5zLtlC5UuA_k89Kfl76dOSVPipJoZgc1UG_1-jdL_GfSbVYicODVgOVUaJb211nAcmK0lFZO3Gretccn_SkeE',
+      })
       .reply(200, success);
 
     const cookieJar = new CookieJar();
@@ -249,7 +245,6 @@ describe('cloudflare', () => {
         statusCodes: [408, 413, 429, 500, 502, 504],
       },
       cookieJar,
-      headers: { 'user-agent': uaString },
     };
 
     let res: any;

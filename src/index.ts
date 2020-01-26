@@ -217,7 +217,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   const challenge = solveChallenge(body, error.options.url.hostname);
 
   // defaults to 6 seconds or ms found in html
-  await delay(challenge.ms + 1000);
+  await delay(challenge.ms);
 
   // make request with answer
   config.prefixUrl = `${error.options.url.protocol}//${error.options.url.hostname}`;

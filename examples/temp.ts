@@ -29,16 +29,8 @@ polly.server.post('/*').passthrough().configure({ recordFailedRequests: true });
 async function main() {
   // cookie jar is required!
   const cookieJar = new CookieJar();
-  const options: any = {
-    prefixUrl: 'https://predb.me/',
-    searchParams: '?search=lord+of+the+rings',
-    headers: {
-      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36',
-      'accept-language': 'en-US,en;q=0.9',
-      'upgrade-insecure-requests': '1',
-      connection: 'keep-alive',
-      accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-    },
+  const options = {
+    prefixUrl: 'https://rlsbb.ru/',
     cookieJar,
     // either disable retry or remove status code 503 from retries
     retry: 0,

@@ -30,7 +30,8 @@ async function main() {
   // cookie jar is required!
   const cookieJar = new CookieJar();
   const options = {
-    prefixUrl: 'https://rlsbb.ru/',
+    // use "url: to describe path
+    url: 'https://rlsbb.ru/support-us',
     cookieJar,
     // either disable retry or remove status code 503 from retries
     retry: 0,

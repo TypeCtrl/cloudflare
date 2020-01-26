@@ -104,8 +104,7 @@ describe('cloudflare', () => {
 
     const cookieJar = new CookieJar();
     const options: any = {
-      url: 'search',
-      prefixUrl: 'http://example.com',
+      url: 'http://example.com/search',
       retry: {
         retries: 0,
         statusCodes: [408, 413, 429, 500, 502, 504],
@@ -165,8 +164,7 @@ describe('cloudflare', () => {
 
     const cookieJar = new CookieJar();
     const options: any = {
-      url: 'search',
-      prefixUrl: 'http://example.com',
+      url: 'http://example.com/search',
       retry: {
         retries: 0,
         statusCodes: [408, 413, 429, 500, 502, 504],
@@ -238,8 +236,7 @@ describe('cloudflare', () => {
 
     const cookieJar = new CookieJar();
     const options: any = {
-      url: 'search',
-      prefixUrl: 'http://example.com',
+      url: 'http://example.com/search',
       retry: {
         retries: 0,
         statusCodes: [408, 413, 429, 500, 502, 504],

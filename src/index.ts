@@ -220,7 +220,11 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   await delay(challenge.ms);
 
   // make request with answer
-  config.prefixUrl = `${error.options.url.protocol}//${error.options.url.hostname}`;
+  config.prefixUrl = `${error.options.url.protocol}//${error.options.url.hostname}/`;
+  if (config.url.startsWith(config.prefixUrl)) {
+    config.url = config.url.replace(config.prefixUrl, '');
+  }
+
   const payload: any = {
     ...rValue,
     // eslint-disable-next-line @typescript-eslint/camelcase

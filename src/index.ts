@@ -258,6 +258,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
     return await got(submitUrl, config);
   } catch (err) {
     // eslint-disable-next-line no-return-await
-    return await catchCloudflare(err, config, attempts + 1);
+    throw err;
+    // return await catchCloudflare(err, config, attempts + 1);
   }
 }

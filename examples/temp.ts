@@ -1,6 +1,28 @@
 import { catchCloudflare } from '../src/index';
 import got, { GotOptions } from 'got';
 import { CookieJar } from 'tough-cookie';
+import { Polly } from '@pollyjs/core';
+import NodeHttpAdapter from '@pollyjs/adapter-node-http';
+import FSPersister from '@pollyjs/persister-fs';
+import * as cloudscraper from 'cloudscraper';
+import XHRAdapter from '@pollyjs/adapter-xhr';
+import FetchAdapter from '@pollyjs/adapter-fetch';
+
+// Register the node http adapter so its accessible by all future polly instances
+Polly.register(NodeHttpAdapter);
+Polly.register(XHRAdapter);
+Polly.register(FSPersister);
+Polly.register(FetchAdapter);
+
+const polly = new Polly('rlsbb', {
+  adapters: ['node-http'],
+  persister: 'fs',
+});
+
+polly.configure({ recordFailedRequests: true });
+
+polly.server.get('/*').passthrough().configure({ recordFailedRequests: true });
+polly.server.post('/*').passthrough().configure({ recordFailedRequests: true });
 
 // example helper function
 async function main() {
@@ -15,7 +37,8 @@ async function main() {
   let res: got.Response<any>;
   try {
     // success without cloudflare?
-    res = await got('https://rlsbb.ru/', options);
+    res = await got.get('https://rlsbb.ru', options);
+    return res;
   } catch (error) {
     // success with cloudflare?
     res = await catchCloudflare(error, options);
@@ -25,6 +48,7 @@ async function main() {
 }
 
 main()
-  .then(x => console.log('success', x))
-  .catch(e => console.error('error', e));
+  .then((res) => console.log('success'))
+  .then(() => polly.stop())
+  .catch(() => console.error('fail'));
 

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import got, { GotOptions } from 'got';
+import got from 'got';
 import nock from 'nock';
 import path from 'path';
 import { CookieJar } from 'tough-cookie';
@@ -105,8 +105,9 @@ describe('cloudflare', () => {
       });
 
     const cookieJar = new CookieJar();
-    const options: GotOptions<null> = {
-      path: '/search',
+    const options: any = {
+      url: 'search',
+      prefixUrl: 'http://example.com',
       retry: {
         retries: 0,
         statusCodes: [408, 413, 429, 500, 502, 504],
@@ -117,7 +118,7 @@ describe('cloudflare', () => {
 
     let res: any;
     try {
-      res = await got.get('http://example.com', options);
+      res = await got.get(options);
       // always will throw
       expect(false).toBe(true);
     } catch (err) {
@@ -166,8 +167,9 @@ describe('cloudflare', () => {
       });
 
     const cookieJar = new CookieJar();
-    const options: GotOptions<null> = {
-      path: '/search',
+    const options: any = {
+      url: 'search',
+      prefixUrl: 'http://example.com',
       retry: {
         retries: 0,
         statusCodes: [408, 413, 429, 500, 502, 504],
@@ -178,7 +180,7 @@ describe('cloudflare', () => {
 
     let res: any;
     try {
-      res = await got.get('http://example.com', options);
+      res = await got.get(options);
       // always will throw
       expect(false).toBe(true);
     } catch (err) {
@@ -239,8 +241,9 @@ describe('cloudflare', () => {
       .reply(200, success);
 
     const cookieJar = new CookieJar();
-    const options: GotOptions<null> = {
-      path: '/search',
+    const options: any = {
+      url: 'search',
+      prefixUrl: 'http://example.com',
       retry: {
         retries: 0,
         statusCodes: [408, 413, 429, 500, 502, 504],
@@ -251,7 +254,7 @@ describe('cloudflare', () => {
 
     let res: any;
     try {
-      res = await got.get('http://example.com', options);
+      res = await got.get(options);
       // always will throw
       expect(false).toBe(true);
     } catch (err) {

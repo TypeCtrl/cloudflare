@@ -5,7 +5,7 @@ import NodeHttpAdapter from '@pollyjs/adapter-node-http';
 import FSPersister from '@pollyjs/persister-fs';
 import XHRAdapter from '@pollyjs/adapter-xhr';
 import FetchAdapter from '@pollyjs/adapter-fetch';
-import * as cloudscraper from 'cloudscraper';
+// import * as cloudscraper from 'cloudscraper';
 
 import { catchCloudflare } from '../src/index';
 
@@ -51,7 +51,7 @@ async function main() {
 }
 
 main()
-  .then(res => console.log('success'))
+  .then(() => console.log('success'))
   .catch(err => console.error('fail', err))
   .then(() => polly.stop());
 

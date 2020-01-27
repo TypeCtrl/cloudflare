@@ -88,7 +88,6 @@ export function solveChallenge(body: string, domain: string) {
   const jsx = a + o + e + dom + atob + g + document + js;
   const str = vm.runInNewContext(jsx, { Buffer, g: String.fromCharCode }, { timeout: 5000 });
   // must eval javascript - potentially very unsafe
-  // eslint-disable-next-line no-eval
   const answer = Number(str);
 
   try {

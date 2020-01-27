@@ -10,7 +10,6 @@ import { catchCloudflare, isCloudflareCaptcha, solveChallenge, getRValue } from 
 
 // disable timeout for tests
 jest.mock('delay');
-// eslint-disable-next-line @typescript-eslint/require-await
 (delay as any).mockImplementation(async () => Promise.resolve());
 
 describe('cloudflare', () => {

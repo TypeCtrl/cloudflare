@@ -21,14 +21,16 @@ Call `catchCloudflare(err, options)` passing the error and the options used to m
 
 ```ts
 import { catchCloudflare } from '@ctrl/cloudflare';
-import got, { GotOptions } from 'got';
+import got from 'got';
 import { CookieJar } from 'tough-cookie';
 
 // example helper function
 async function main() {
-  // cookie jar is required!
+  // cookie jar is required! speed up future requests by keeping a persistant cookie jar
   const cookieJar = new CookieJar();
-  const options: GotOptions<any> = {
+  const options = {
+    // use "url: to describe path
+    url: 'https://rlsbb.ru/support-us',
     cookieJar,
     // either disable retry or remove status code 503 from retries
     retry: 0,
@@ -37,7 +39,7 @@ async function main() {
   let res: got.Response<any>;
   try {
     // success without cloudflare?
-    res = await got('https://rlsbb.ru/', options);
+    res = await got(options);
   } catch (error) {
     // success with cloudflare?
     res = await catchCloudflare(error, options);
@@ -46,7 +48,6 @@ async function main() {
   return res.body;
 }
 ```
-
 
 ### See Also
 - [cloudflare-scrape](https://github.com/Anorov/cloudflare-scrape) - python bypass using V8

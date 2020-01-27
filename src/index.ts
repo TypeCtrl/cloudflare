@@ -3,7 +3,6 @@ import crypto from 'crypto';
 import delay from 'delay';
 import got, { Response, RetryOptions } from 'got';
 import https from 'https';
-import uaString from 'ua-string';
 import vm from 'vm';
 import { URLSearchParams } from 'url';
 
@@ -89,7 +88,6 @@ export function solveChallenge(body: string, domain: string) {
   const jsx = a + o + e + dom + atob + g + document + js;
   const str = vm.runInNewContext(jsx, { Buffer, g: String.fromCharCode }, { timeout: 5000 });
   // must eval javascript - potentially very unsafe
-  // eslint-disable-next-line no-eval
   const answer = Number(str);
 
   try {
@@ -139,11 +137,14 @@ export function getMethod(body: string) {
  * @param headers existing headers
  */
 export function setupHeaders(headers: any = {}): any {
-  headers.accept =
-    headers.accept ||
-    'application/xml,application/xhtml+xml,text/html;q=0.9, text/plain;q=0.8,image/png,*/*;q=0.5';
-  headers['user-agent'] = headers['user-agent'] || uaString;
-  return headers;
+  return {
+    accept: headers.accept || 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36',
+    'upgrade-insecure-requests': '1',
+    'accept-language': 'en-US,en;q=0.9',
+    connection: 'keep-alive',
+    'Cache-Control': 'max-age=0',
+  };
 }
 
 class CaptchaError extends Error {
@@ -193,12 +194,16 @@ export async function catchCloudflare<T extends Buffer | string | object>(
     throw new CloudflareMaxAttemptsError(`Unable to bypass cloudflare attempts: ${attempts}`);
   }
 
-  config.headers = config.headers || {};
-  config.headers = setupHeaders(config.headers);
-  config.headers.referer = `${error.url.substring(0, error.url.length - 1)}${error.path || ''}`;
+  const newHeaders = setupHeaders(config.headers);
+  config.headers = { ...config.headers, ...newHeaders } || newHeaders;
+  // console.log(error.options);
+  config.headers.referer = `${error.options.url.href}${error.options.pathname || ''}`;
   config.headers['cache-control'] = config.headers['cache-control'] || 'private';
-  const retry: RetryOptions = config.retry || {};
-  config.retry.statusCodes = [408, 413, 429, 500, 502, 504];
+
+  const retry: RetryOptions = {
+    statusCodes: [408, 413, 429, 500, 502, 504],
+    limit: 0,
+  };
   config.retry = retry;
 
   // get form field values
@@ -208,13 +213,17 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   const rValue = getRValue(body);
   const method = getMethod(body);
   // solve js challenge
-  const challenge = solveChallenge(body, error.hostname);
+  const challenge = solveChallenge(body, error.options.url.hostname);
 
   // defaults to 6 seconds or ms found in html
   await delay(challenge.ms);
 
   // make request with answer
-  const submitUrl = `${error.protocol}//${error.hostname}`;
+  config.prefixUrl = `${error.options.url.protocol}//${error.options.url.hostname}/`;
+  if (config.url.startsWith(config.prefixUrl)) {
+    config.url = config.url.replace(config.prefixUrl, '');
+  }
+
   const payload: any = {
     ...rValue,
     // eslint-disable-next-line @typescript-eslint/camelcase
@@ -226,13 +235,13 @@ export async function catchCloudflare<T extends Buffer | string | object>(
 
   if (method.toUpperCase() === 'GET') {
     config.method = 'GET';
-    config.path = '/cdn-cgi/l/chk_jschl';
+    config.url = 'cdn-cgi/l/chk_jschl';
     payload.s = s;
-    config.query = payload;
+    config.searchParams = payload;
   } else {
     config.method = 'POST';
     const queryMatch = body.match(/id="challenge-form" action="(.+?)" method="(.+?)"/);
-    config.query = queryMatch[1];
+    config.searchParams = queryMatch[1].replace('/?__cf_chl_jschl_tk__', '__cf_chl_jschl_tk__');
     const params = new URLSearchParams();
     for (const entry of Object.entries(payload)) {
       params.append(entry[0], entry[1] as string);
@@ -255,7 +264,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   }
 
   try {
-    return await got(submitUrl, config);
+    return await got(config);
   } catch (err) {
     // eslint-disable-next-line no-return-await
     return await catchCloudflare(err, config, attempts + 1);

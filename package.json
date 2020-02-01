@@ -46,7 +46,7 @@
     "@pollyjs/persister-fs": "4.0.0",
     "@pollyjs/persister-local-storage": "4.0.0",
     "@pollyjs/persister-rest": "4.0.0",
-    "@types/jest": "24.9.1",
+    "@types/jest": "25.1.1",
     "@types/nock": "11.1.0",
     "@types/node": "13.7.0",
     "@types/tough-cookie": "2.3.6",

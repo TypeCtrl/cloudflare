@@ -36,17 +36,17 @@
   "dependencies": {
     "buffer": "^5.4.3",
     "delay": "^4.3.0",
-    "got": "^10.3.0"
+    "got": "^10.4.0"
   },
   "devDependencies": {
-    "@pollyjs/adapter-fetch": "4.0.0",
-    "@pollyjs/adapter-node-http": "4.0.0",
-    "@pollyjs/adapter-xhr": "4.0.0",
-    "@pollyjs/core": "4.0.0",
-    "@pollyjs/persister-fs": "4.0.0",
-    "@pollyjs/persister-local-storage": "4.0.0",
-    "@pollyjs/persister-rest": "4.0.0",
-    "@types/jest": "24.9.1",
+    "@pollyjs/adapter-fetch": "4.0.2",
+    "@pollyjs/adapter-node-http": "4.0.3",
+    "@pollyjs/adapter-xhr": "4.0.2",
+    "@pollyjs/core": "4.0.2",
+    "@pollyjs/persister-fs": "4.0.2",
+    "@pollyjs/persister-local-storage": "4.0.2",
+    "@pollyjs/persister-rest": "4.0.2",
+    "@types/jest": "25.1.1",
     "@types/nock": "11.1.0",
     "@types/node": "13.7.0",
     "@types/tough-cookie": "2.3.6",
@@ -60,7 +60,7 @@
     "jest": "25.1.0",
     "jest-junit": "10.0.0",
     "nock": "11.7.2",
-    "semantic-release": "16.0.4",
+    "semantic-release": "17.0.2",
     "tough-cookie": "3.0.1",
     "ts-jest": "25.1.0",
     "typescript": "3.7.5"

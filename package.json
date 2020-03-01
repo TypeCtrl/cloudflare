@@ -48,7 +48,7 @@
     "@pollyjs/persister-rest": "4.0.2",
     "@types/jest": "25.1.1",
     "@types/nock": "11.1.0",
-    "@types/node": "13.7.0",
+    "@types/node": "13.7.7",
     "@types/tough-cookie": "2.3.6",
     "@typescript-eslint/eslint-plugin": "2.18.0",
     "@typescript-eslint/parser": "2.18.0",

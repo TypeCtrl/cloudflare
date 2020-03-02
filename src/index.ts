@@ -226,10 +226,8 @@ export async function catchCloudflare<T extends Buffer | string | object>(
 
   const payload: any = {
     ...rValue,
-    // eslint-disable-next-line @typescript-eslint/camelcase
     jschl_vc: jschlVc,
     pass,
-    // eslint-disable-next-line @typescript-eslint/camelcase
     jschl_answer: challenge.answer,
   };
 

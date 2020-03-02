@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import fs from 'fs';
 import got from 'got';
 import nock from 'nock';

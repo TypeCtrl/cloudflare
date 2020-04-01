@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@pollyjs/adapter-fetch": "4.0.4",
-    "@pollyjs/adapter-node-http": "4.0.3",
+    "@pollyjs/adapter-node-http": "4.0.4",
     "@pollyjs/adapter-xhr": "4.0.2",
     "@pollyjs/core": "4.0.2",
     "@pollyjs/persister-fs": "4.0.2",

@@ -16,5 +16,8 @@ module.exports = {
     '@typescript-eslint/no-unnecessary-condition': 0,
     '@typescript-eslint/prefer-optional-chain': 0,
     '@typescript-eslint/restrict-template-expressions': 0,
+    '@typescript-eslint/no-unsafe-member-access': 0,
+    '@typescript-eslint/no-unsafe-call': 0,
+    '@typescript-eslint/no-unsafe-return': 0,
   },
 };

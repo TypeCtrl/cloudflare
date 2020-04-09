@@ -235,11 +235,11 @@ export async function catchCloudflare<T extends Buffer | string | object>(
     config.method = 'GET';
     config.url = 'cdn-cgi/l/chk_jschl';
     payload.s = s;
-    config.searchParams = payload;
+    config.searchParams = new URLSearchParams(payload).toString().replace(/&amp;/g, '&');
   } else {
     config.method = 'POST';
     const queryMatch = body.match(/id="challenge-form" action="(.+?)" method="(.+?)"/);
-    config.searchParams = queryMatch[1].replace('/?__cf_chl_jschl_tk__', '__cf_chl_jschl_tk__');
+    config.searchParams = queryMatch[1].replace('/?__cf_chl_jschl_tk__', '__cf_chl_jschl_tk__').replace(/&amp;/g, '&');
     const params = new URLSearchParams();
     for (const entry of Object.entries(payload)) {
       params.append(entry[0], entry[1] as string);

@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer';
 import crypto from 'crypto';
 import delay from 'delay';
-import got, { Response, RetryOptions } from 'got';
+import got, { Response, RequiredRetryOptions } from 'got';
 import https from 'https';
 import vm from 'vm';
 import { URLSearchParams } from 'url';
@@ -200,7 +200,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   config.headers.referer = `${error.options.url.href}${error.options.pathname || ''}`;
   config.headers['cache-control'] = config.headers['cache-control'] || 'private';
 
-  const retry: RetryOptions = {
+  const retry: Partial<RequiredRetryOptions> = {
     statusCodes: [408, 413, 429, 500, 502, 504],
     limit: 0,
   };
@@ -262,7 +262,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   }
 
   try {
-    return await got(config);
+    return await got<T>(config);
   } catch (err) {
     // eslint-disable-next-line no-return-await
     return await catchCloudflare(err, config, attempts + 1);

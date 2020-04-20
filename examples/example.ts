@@ -34,5 +34,5 @@ async function main() {
 }
 
 main()
-  .then(() => console.log('success'))
+  .then(res => console.log(res))
   .catch(err => console.error('fail', err));

@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer';
 import crypto from 'crypto';
 import delay from 'delay';
 import got, { Response, RequiredRetryOptions } from 'got';

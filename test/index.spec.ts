@@ -5,7 +5,15 @@ import path from 'path';
 import { CookieJar } from 'tough-cookie';
 import delay from 'delay';
 
-import { catchCloudflare, isCloudflareCaptcha, solveChallenge, getRValue } from '../src/index';
+import {
+  catchCloudflare,
+  isCloudflareCaptcha,
+  solveChallenge,
+  getRValue,
+  jschlValue,
+  passValue,
+  sValue,
+} from '../src/index';
 
 // disable timeout for tests
 jest.mock('delay');
@@ -49,6 +57,56 @@ describe('cloudflare', () => {
     expect(challenge.ms).toBe(4000);
   });
 
+  it('should get sValue 2019_1', () => {
+    const html = fs.readFileSync(path.join(__dirname, './html/2019_1'), 'utf8');
+    const pass = sValue(html);
+    expect(pass).toBe(
+      '952a9c14c8ff41d0a7e2536916d4c48bbe8b614c-1554683886-1800-AUYflGr0kMAOZ6sitOwGdIjGxpLVXarkUQV6c5NBF3iZnTTud7cOG+szYmJXI404pK4OGNJ+qJMQnYig71bNf08dVYaC7FwFYhvDBgfdcTQNMCjDBoMlkFI61kchaoXU/A==',
+    );
+  });
+
+  it('should get passValue 2019_3', () => {
+    const html = fs.readFileSync(path.join(__dirname, './html/2019_3'), 'utf8');
+    const pass = passValue(html);
+    expect(pass).toBe('1575008532.865-SJzufpXp5T');
+  });
+
+  it('should get passValue 2020_1', () => {
+    const html = fs.readFileSync(path.join(__dirname, './html/2020_1'), 'utf8');
+    const pass = passValue(html);
+    expect(pass).toBe('1588275807.664-kzBLOqvn3Q');
+  });
+
+  it('should get jschlValue 2019_3', () => {
+    const html = fs.readFileSync(path.join(__dirname, './html/2019_3'), 'utf8');
+    const jsch = jschlValue(html);
+    expect(jsch).toBe('37f5c67a82dd9cd6b9239bd185a21e8b');
+  });
+
+  it('should get jschlValue 2020_1', () => {
+    const html = fs.readFileSync(path.join(__dirname, './html/2020_1'), 'utf8');
+    const jsch = jschlValue(html);
+    expect(jsch).toBe('d0ee39116ea50487dc16670c6fcdaaed');
+  });
+
+  it('should get r value 2019_3', () => {
+    const html = fs.readFileSync(path.join(__dirname, './html/2019_3'), 'utf8');
+    const result = getRValue(html);
+    expect(result).toHaveProperty(
+      'r',
+      '6f1075a4b86ca26cfe982f36050e92bdfb709f75-1575008528-0-ATm//i2nsd2Iv5QIdr90QBJ07vIYc7kvjbdrqrCAPF2wjQ6WenG6ZErJOFqWISFxtz03BZY5YeNKnbv8jS6II7ZjnyPzbFRQNjNyf/oAbncGR3ZeWa2RKfEjG5SzrhUjNLwH+KucK29s3kz2UoSCNN9jOLirh0kCkQIR5B0NjOI8YuK5RE9US9UTAgEvEQmo7lgSDmmLY/LgHC3HyNuDUg/DRAuU+r/n9zlk4pfL8RpV80mxrG7Z8sRJ+skTuvxHeN7zr7K4IIsjnpz5ccy/nI8IxiNuQQ5+JR/8ENXCVY1S1UHMPlxIYPldJwpYTVTHMoQXs2ZDKRMsBECy+j/YJllGLtbH/IfdTbor1qih9BYpaQF9dyrp+Usqg5w5o4SgAcon+LhJlADUfxhVy5CagpPXIlcDBJnSi31RRUMFl6aLI4BN7KzWz/6yx709MjezOEz1KndXO+N5WRpDWGp9oasXiDQcRtjRYpjlgBUpzhrb/MYlQ9C2Z773Ti70zM50Y1x3JDFUnjh4SCqsR6Hcu69KcP4FhCH/oFjrTRkrfcWUHcA1VGqMLIdhpMzJRGkkpps6qMFAEcdsILAh5Q9PSdYkGAYGaxNdnOgyXVPloY/dS2bLXP9QOLs+Twqpi4eSve73rSq0+ypnrnA0pmgwc/BIcA3PsSoGSmVz+AOoudAOWQyBsIPbT0Vp0x55ABPMeuYefvGI6RvQ5yEIKBRA8VFkIn/vBjD/b/dasSskb6UduiGrJ8f+OZYRnrRvXF/RQBNobs2c4UZLasbKYf8TZ0nY5P9KNgTilOeMHXtJaPJ6nfWJE7dZea1MHFm2uvO9Dl8ItsF71AcreEOcuPCf9Yf/Kj3SY84WZYAwiYxHKgIAtbLCNpGjeTWgTm5n5fCXRTehhjMZcQihvBOE4OHdrZlEtTcFZme9ELVCoBwV6FV+I+cHr7nlzYpHya6oqacfKu0jE4u9fSEoJVzPLb2oWoMevkoyoreYmvRgFPDvlISuwM5PBpOLB1PgwXY8LumHeV7cQQePlyl9pyGsevTRMgTyJeKkwECyAZjbreSeDV1BdeFd+YZzls55aQmosqJBkCGtDSVvjB7gf+hiS9tSxUAse4yOm7ayYv/dyVBvMY6R8Sjmd0nPYyHzrEhFDFgbeadYnQyt0LDIaxT8RUphIZ/PQl5BndMWVX9zlgLAlNrawnldPkOtL+WD6yuvlbytis1OT5XfhozJTYyPKrg7sen2U8g9Mdsss9Yhj3X9FW6qBrx9s1eN5qrOx97Cf56tqS3OQg1q3jG5Ki7wtfnsdyZAEvzm/gREW69nP2O03EbLkeoRhBPghOZa/dR0n2nKTXo5dhpaGdVstQjToWR50+wFflcMdW7mYg/kwcLeJGP/MYo/u8WyRwRWnP+Al4/ONEOSCvP8dTS7S6PjWWfMl4HMJuOW5GyN7ndhzxzSmreutOig27Fz0KCJprHqgKhXKfuji1ZLYDeWtVHuWKnBQSWgyBfMWpd/gR/bdeYdRzIO1Hjgl5SbMskfKkgJMSqfS1i3v+y/DvbAEqYSQ7aoYDGputMZkBiKeE6AAsBtsV41',
+    );
+  });
+
+  it('should get r value 2020_1', () => {
+    const html = fs.readFileSync(path.join(__dirname, './html/2020_1'), 'utf8');
+    const result = getRValue(html);
+    expect(result).toHaveProperty(
+      'r',
+      '09d0006827d8584de98c5e40f1e9bc45e028c969-1588275803-0-AQae7Lk0KG3WoC7L6HMNnYNJNXJAB7g/f+cuv+k8bRdZhuN85ul0nLmeVrbh5RgGnLrygZ20Czh3a1mRd81YlgdIPFbyPdpivA9Bvgk+f0yQFMO59F84IizGdCj0933EZ7/hDY6ZGmtkd3kEpVAiu6E3cCDiKhch++p8HagSCfo5EfICCFm7J0dFurYmjmCrZyOp1qAGKg1O+Q8znmSwXDxFPpWL3e22QuLataJqJYRsPJADKOKTmWSeChPCQjPFQo/XnjKXcFjNA09YsSF1XxgULHAzMRNhnapgBGLcItI4COpYYRMspFvllsEe4eM7epCcxXcE8KWGO+egujF5S0D/VtGTwm11poWXxqzkTJoYd+pSzFKBSsJLYj8YMbo08d8rbRORfmU+HrY6L0twUBxGvFPBMpL8mUr/4YLONxvRO6OOzyE/z2FVwQQisMwrV5/sboRbccHnibvG+bwkNLORSLzrhNSjJxDf2kd3s6rATUYiNTfPG3RhgQf25HcWr8GLqksFGb0pdYracL7RtiFl24bq+uMLS8ZR2xdB9DX8mhjlDBTePzykNl/fXqOQ0z0l74vLa1icJ6XiyWhl/YM4SFy1ql49M/VlOim+IuMpH4pW4uekLMk7ekuwfW0EFGcejEnAmRbmJlofCrMuA1eitkYIKJ09Woqv2V3YnEN+ysa0OIP6M93MdtYTi379j6O7wua0eXlizcN5blKRQGU0qKf0Dlx5YT4ivwW03VyA6i8yJRt+vjcQCFJxsfQC3A1F7Kvv2DL3rCqUrEjiqVFB++AD4pYn8IyMLMYnWY7zGHPz5/2vSQUDdKsrPD3rlXYCymdPs906zQyJdFZLMtGOyNn2Aa1/HbDRfm2BNyn4y9DidQJLWegDSpw6c4Xmo4wtLv7HP0BZNI3RCLvu89b4ekDj5+9siT23lNySIE+UiEXvsPjWWMQVt76VCSyI05gR1RR7Bi9JU58tMWKTPpb9xR1Y2NCzgIoy1HzIY7KlVvngyCFW82UU+FtxH5YEK91xA6ubk+s6Uk0vTLtzf9XMMwB7u0WhcAZOgBqrlWGdr8yOGdM5eOOGvPPHi1rVFvgBhNb2fTyLvvidyX0IW1LW0QQTdyhSfJVxorSVsZMOJzO3S3m4nfD/Ety41Xl9TGYLAEIkNIm6wIEGXqf3Zd9j1ZUOnTEALMw6WWI9mUqrzlX3R/QRD6/LiYh/kaxm9NhwCoVW+IWA/U5bvV3eg/ZQkD5yL8qGURiKQocRThz6aVmy52KBCgzHayaMl/zniIV4Vqn5CpqJCgoM7NMXWzigmKOagmvtOVMgiKqoeCKRORK0/efj7m+UQxdkPpxc8IWSruHuSD3dsNIk41AolSPXXxmwC0O/HUTb/ol3218Y/2G359hTV1+LhLHnLpWCJQS5XLFRtYvDNyMV83qvKWh8JR0n4NVqudUaR+FW1mUmLGiBsnR5A2u8Su0so4vmNEMh2xb1oX7Jo63NF7kMfG1EjdXGxF17/7SwxuAt2z3tLtK4yVXWGHDrtZOL6ktR8rpQc5BfUg/JklWH7M+//fmgzD8cylCWwe58m7/SAh44Uo1THgr3hL32AP8QQPLGU/YC4hTVRRfvlzJwLnWrSarY2dcTw1UXG6tqE1qlKK1XognwfeXMlOkT/G6q6jUxuw==',
+    );
+  });
+
   it('should spot captcha', () => {
     const html = fs.readFileSync(path.join(__dirname, './html/captcha'), 'utf8');
     expect(isCloudflareCaptcha(html)).toBe(true);
@@ -67,11 +125,9 @@ describe('cloudflare', () => {
   it('should catch cloudflare page and solve challenge 2018 1', async () => {
     // failed request blocked by cloudflare
     const html = fs.readFileSync(path.join(__dirname, './html/2018_1'), 'utf8');
-    const f = nock('http://example.com')
-      .get('/search')
-      .reply(503, html, {
-        server: 'cloudflare',
-      });
+    const f = nock('http://example.com').get('/search').reply(503, html, {
+      server: 'cloudflare',
+    });
 
     const success = '<h1>Hello</h1>';
     const n = nock('http://example.com', {
@@ -130,11 +186,9 @@ describe('cloudflare', () => {
   it('should catch cloudflare page and solve challenge 2019 1', async () => {
     // failed request blocked by cloudflare
     const html = fs.readFileSync(path.join(__dirname, './html/2019_1'), 'utf8');
-    const f = nock('http://example.com')
-      .get('/search')
-      .reply(503, html, {
-        server: 'cloudflare',
-      });
+    const f = nock('http://example.com').get('/search').reply(503, html, {
+      server: 'cloudflare',
+    });
 
     const success = '<h1>Hello</h1>';
     const n = nock('http://example.com', {
@@ -192,23 +246,12 @@ describe('cloudflare', () => {
     expect(() => solveChallenge(html, 'example-site.dev')).toThrow();
   });
 
-  it('should get r value', () => {
-    const html = fs.readFileSync(path.join(__dirname, './html/2019_3'), 'utf8');
-    const result = getRValue(html);
-    expect(result).toHaveProperty(
-      'r',
-      '6f1075a4b86ca26cfe982f36050e92bdfb709f75-1575008528-0-ATm//i2nsd2Iv5QIdr90QBJ07vIYc7kvjbdrqrCAPF2wjQ6WenG6ZErJOFqWISFxtz03BZY5YeNKnbv8jS6II7ZjnyPzbFRQNjNyf/oAbncGR3ZeWa2RKfEjG5SzrhUjNLwH+KucK29s3kz2UoSCNN9jOLirh0kCkQIR5B0NjOI8YuK5RE9US9UTAgEvEQmo7lgSDmmLY/LgHC3HyNuDUg/DRAuU+r/n9zlk4pfL8RpV80mxrG7Z8sRJ+skTuvxHeN7zr7K4IIsjnpz5ccy/nI8IxiNuQQ5+JR/8ENXCVY1S1UHMPlxIYPldJwpYTVTHMoQXs2ZDKRMsBECy+j/YJllGLtbH/IfdTbor1qih9BYpaQF9dyrp+Usqg5w5o4SgAcon+LhJlADUfxhVy5CagpPXIlcDBJnSi31RRUMFl6aLI4BN7KzWz/6yx709MjezOEz1KndXO+N5WRpDWGp9oasXiDQcRtjRYpjlgBUpzhrb/MYlQ9C2Z773Ti70zM50Y1x3JDFUnjh4SCqsR6Hcu69KcP4FhCH/oFjrTRkrfcWUHcA1VGqMLIdhpMzJRGkkpps6qMFAEcdsILAh5Q9PSdYkGAYGaxNdnOgyXVPloY/dS2bLXP9QOLs+Twqpi4eSve73rSq0+ypnrnA0pmgwc/BIcA3PsSoGSmVz+AOoudAOWQyBsIPbT0Vp0x55ABPMeuYefvGI6RvQ5yEIKBRA8VFkIn/vBjD/b/dasSskb6UduiGrJ8f+OZYRnrRvXF/RQBNobs2c4UZLasbKYf8TZ0nY5P9KNgTilOeMHXtJaPJ6nfWJE7dZea1MHFm2uvO9Dl8ItsF71AcreEOcuPCf9Yf/Kj3SY84WZYAwiYxHKgIAtbLCNpGjeTWgTm5n5fCXRTehhjMZcQihvBOE4OHdrZlEtTcFZme9ELVCoBwV6FV+I+cHr7nlzYpHya6oqacfKu0jE4u9fSEoJVzPLb2oWoMevkoyoreYmvRgFPDvlISuwM5PBpOLB1PgwXY8LumHeV7cQQePlyl9pyGsevTRMgTyJeKkwECyAZjbreSeDV1BdeFd+YZzls55aQmosqJBkCGtDSVvjB7gf+hiS9tSxUAse4yOm7ayYv/dyVBvMY6R8Sjmd0nPYyHzrEhFDFgbeadYnQyt0LDIaxT8RUphIZ/PQl5BndMWVX9zlgLAlNrawnldPkOtL+WD6yuvlbytis1OT5XfhozJTYyPKrg7sen2U8g9Mdsss9Yhj3X9FW6qBrx9s1eN5qrOx97Cf56tqS3OQg1q3jG5Ki7wtfnsdyZAEvzm/gREW69nP2O03EbLkeoRhBPghOZa/dR0n2nKTXo5dhpaGdVstQjToWR50+wFflcMdW7mYg/kwcLeJGP/MYo/u8WyRwRWnP+Al4/ONEOSCvP8dTS7S6PjWWfMl4HMJuOW5GyN7ndhzxzSmreutOig27Fz0KCJprHqgKhXKfuji1ZLYDeWtVHuWKnBQSWgyBfMWpd/gR/bdeYdRzIO1Hjgl5SbMskfKkgJMSqfS1i3v+y/DvbAEqYSQ7aoYDGputMZkBiKeE6AAsBtsV41',
-    );
-  });
-
   it('should catch cloudflare page and solve challenge 2019 3', async () => {
     // failed request blocked by cloudflare
     const html = fs.readFileSync(path.join(__dirname, './html/2019_3'), 'utf8');
-    const f = nock('http://example.com')
-      .get('/search')
-      .reply(503, html, {
-        server: 'cloudflare',
-      });
+    const f = nock('http://example.com').get('/search').reply(503, html, {
+      server: 'cloudflare',
+    });
 
     const success = '<h1>Hello</h1>';
     const n = nock('http://example.com', {
@@ -216,19 +259,17 @@ describe('cloudflare', () => {
         referer: 'http://example.com/search',
       },
     })
-      .post(
-        '/search',
-        {
-          r:
-            '6f1075a4b86ca26cfe982f36050e92bdfb709f75-1575008528-0-ATm//i2nsd2Iv5QIdr90QBJ07vIYc7kvjbdrqrCAPF2wjQ6WenG6ZErJOFqWISFxtz03BZY5YeNKnbv8jS6II7ZjnyPzbFRQNjNyf/oAbncGR3ZeWa2RKfEjG5SzrhUjNLwH+KucK29s3kz2UoSCNN9jOLirh0kCkQIR5B0NjOI8YuK5RE9US9UTAgEvEQmo7lgSDmmLY/LgHC3HyNuDUg/DRAuU+r/n9zlk4pfL8RpV80mxrG7Z8sRJ+skTuvxHeN7zr7K4IIsjnpz5ccy/nI8IxiNuQQ5+JR/8ENXCVY1S1UHMPlxIYPldJwpYTVTHMoQXs2ZDKRMsBECy+j/YJllGLtbH/IfdTbor1qih9BYpaQF9dyrp+Usqg5w5o4SgAcon+LhJlADUfxhVy5CagpPXIlcDBJnSi31RRUMFl6aLI4BN7KzWz/6yx709MjezOEz1KndXO+N5WRpDWGp9oasXiDQcRtjRYpjlgBUpzhrb/MYlQ9C2Z773Ti70zM50Y1x3JDFUnjh4SCqsR6Hcu69KcP4FhCH/oFjrTRkrfcWUHcA1VGqMLIdhpMzJRGkkpps6qMFAEcdsILAh5Q9PSdYkGAYGaxNdnOgyXVPloY/dS2bLXP9QOLs+Twqpi4eSve73rSq0+ypnrnA0pmgwc/BIcA3PsSoGSmVz+AOoudAOWQyBsIPbT0Vp0x55ABPMeuYefvGI6RvQ5yEIKBRA8VFkIn/vBjD/b/dasSskb6UduiGrJ8f+OZYRnrRvXF/RQBNobs2c4UZLasbKYf8TZ0nY5P9KNgTilOeMHXtJaPJ6nfWJE7dZea1MHFm2uvO9Dl8ItsF71AcreEOcuPCf9Yf/Kj3SY84WZYAwiYxHKgIAtbLCNpGjeTWgTm5n5fCXRTehhjMZcQihvBOE4OHdrZlEtTcFZme9ELVCoBwV6FV+I+cHr7nlzYpHya6oqacfKu0jE4u9fSEoJVzPLb2oWoMevkoyoreYmvRgFPDvlISuwM5PBpOLB1PgwXY8LumHeV7cQQePlyl9pyGsevTRMgTyJeKkwECyAZjbreSeDV1BdeFd+YZzls55aQmosqJBkCGtDSVvjB7gf+hiS9tSxUAse4yOm7ayYv/dyVBvMY6R8Sjmd0nPYyHzrEhFDFgbeadYnQyt0LDIaxT8RUphIZ/PQl5BndMWVX9zlgLAlNrawnldPkOtL+WD6yuvlbytis1OT5XfhozJTYyPKrg7sen2U8g9Mdsss9Yhj3X9FW6qBrx9s1eN5qrOx97Cf56tqS3OQg1q3jG5Ki7wtfnsdyZAEvzm/gREW69nP2O03EbLkeoRhBPghOZa/dR0n2nKTXo5dhpaGdVstQjToWR50+wFflcMdW7mYg/kwcLeJGP/MYo/u8WyRwRWnP+Al4/ONEOSCvP8dTS7S6PjWWfMl4HMJuOW5GyN7ndhzxzSmreutOig27Fz0KCJprHqgKhXKfuji1ZLYDeWtVHuWKnBQSWgyBfMWpd/gR/bdeYdRzIO1Hjgl5SbMskfKkgJMSqfS1i3v+y/DvbAEqYSQ7aoYDGputMZkBiKeE6AAsBtsV41',
-          jschl_vc: '37f5c67a82dd9cd6b9239bd185a21e8b',
-          pass: '1575008532.865-SJzufpXp5T',
-          // jschl_answer: 11.0424687495,
-          jschl_answer: 14.0424687495,
-        },
-      )
+      .post('/search', {
+        r:
+          '6f1075a4b86ca26cfe982f36050e92bdfb709f75-1575008528-0-ATm//i2nsd2Iv5QIdr90QBJ07vIYc7kvjbdrqrCAPF2wjQ6WenG6ZErJOFqWISFxtz03BZY5YeNKnbv8jS6II7ZjnyPzbFRQNjNyf/oAbncGR3ZeWa2RKfEjG5SzrhUjNLwH+KucK29s3kz2UoSCNN9jOLirh0kCkQIR5B0NjOI8YuK5RE9US9UTAgEvEQmo7lgSDmmLY/LgHC3HyNuDUg/DRAuU+r/n9zlk4pfL8RpV80mxrG7Z8sRJ+skTuvxHeN7zr7K4IIsjnpz5ccy/nI8IxiNuQQ5+JR/8ENXCVY1S1UHMPlxIYPldJwpYTVTHMoQXs2ZDKRMsBECy+j/YJllGLtbH/IfdTbor1qih9BYpaQF9dyrp+Usqg5w5o4SgAcon+LhJlADUfxhVy5CagpPXIlcDBJnSi31RRUMFl6aLI4BN7KzWz/6yx709MjezOEz1KndXO+N5WRpDWGp9oasXiDQcRtjRYpjlgBUpzhrb/MYlQ9C2Z773Ti70zM50Y1x3JDFUnjh4SCqsR6Hcu69KcP4FhCH/oFjrTRkrfcWUHcA1VGqMLIdhpMzJRGkkpps6qMFAEcdsILAh5Q9PSdYkGAYGaxNdnOgyXVPloY/dS2bLXP9QOLs+Twqpi4eSve73rSq0+ypnrnA0pmgwc/BIcA3PsSoGSmVz+AOoudAOWQyBsIPbT0Vp0x55ABPMeuYefvGI6RvQ5yEIKBRA8VFkIn/vBjD/b/dasSskb6UduiGrJ8f+OZYRnrRvXF/RQBNobs2c4UZLasbKYf8TZ0nY5P9KNgTilOeMHXtJaPJ6nfWJE7dZea1MHFm2uvO9Dl8ItsF71AcreEOcuPCf9Yf/Kj3SY84WZYAwiYxHKgIAtbLCNpGjeTWgTm5n5fCXRTehhjMZcQihvBOE4OHdrZlEtTcFZme9ELVCoBwV6FV+I+cHr7nlzYpHya6oqacfKu0jE4u9fSEoJVzPLb2oWoMevkoyoreYmvRgFPDvlISuwM5PBpOLB1PgwXY8LumHeV7cQQePlyl9pyGsevTRMgTyJeKkwECyAZjbreSeDV1BdeFd+YZzls55aQmosqJBkCGtDSVvjB7gf+hiS9tSxUAse4yOm7ayYv/dyVBvMY6R8Sjmd0nPYyHzrEhFDFgbeadYnQyt0LDIaxT8RUphIZ/PQl5BndMWVX9zlgLAlNrawnldPkOtL+WD6yuvlbytis1OT5XfhozJTYyPKrg7sen2U8g9Mdsss9Yhj3X9FW6qBrx9s1eN5qrOx97Cf56tqS3OQg1q3jG5Ki7wtfnsdyZAEvzm/gREW69nP2O03EbLkeoRhBPghOZa/dR0n2nKTXo5dhpaGdVstQjToWR50+wFflcMdW7mYg/kwcLeJGP/MYo/u8WyRwRWnP+Al4/ONEOSCvP8dTS7S6PjWWfMl4HMJuOW5GyN7ndhzxzSmreutOig27Fz0KCJprHqgKhXKfuji1ZLYDeWtVHuWKnBQSWgyBfMWpd/gR/bdeYdRzIO1Hjgl5SbMskfKkgJMSqfS1i3v+y/DvbAEqYSQ7aoYDGputMZkBiKeE6AAsBtsV41',
+        jschl_vc: '37f5c67a82dd9cd6b9239bd185a21e8b',
+        pass: '1575008532.865-SJzufpXp5T',
+        // jschl_answer: 11.0424687495,
+        jschl_answer: 14.0424687495,
+      })
       .query({
-        __cf_chl_jschl_tk__: 'f539ef78a6f8f16e2bbd6f5ac58521fac384f768-1575008528-0-AWIaFifdVJx1IsVKH1F3nFTl3hj41-_-hUwBdgc71_bOu_193CjxrjpPl-UnZnGjYe2OU_7y64hQ_cptYoZ-oA2BnXQL_J9QlV_Cm-BXF4J16nH-OVR7TVRI4Z1ZqAkRKcmUBuaZxms22Eb6dRzqukKDOMkrer9RVjPv0T1uE_8TZ4zm0ln3Bg8kY9jf9NEHfa5zLtlC5UuA_k89Kfl76dOSVPipJoZgc1UG_1-jdL_GfSbVYicODVgOVUaJb211nAcmK0lFZO3Gretccn_SkeE',
+        __cf_chl_jschl_tk__:
+          'f539ef78a6f8f16e2bbd6f5ac58521fac384f768-1575008528-0-AWIaFifdVJx1IsVKH1F3nFTl3hj41-_-hUwBdgc71_bOu_193CjxrjpPl-UnZnGjYe2OU_7y64hQ_cptYoZ-oA2BnXQL_J9QlV_Cm-BXF4J16nH-OVR7TVRI4Z1ZqAkRKcmUBuaZxms22Eb6dRzqukKDOMkrer9RVjPv0T1uE_8TZ4zm0ln3Bg8kY9jf9NEHfa5zLtlC5UuA_k89Kfl76dOSVPipJoZgc1UG_1-jdL_GfSbVYicODVgOVUaJb211nAcmK0lFZO3Gretccn_SkeE',
       })
       .reply(200, success);
 

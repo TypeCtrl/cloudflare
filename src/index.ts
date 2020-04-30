@@ -97,15 +97,35 @@ export function solveChallenge(body: string, domain: string) {
 }
 
 export function jschlValue(body: string) {
-  const vcReg = /name="jschl_vc"\svalue="(\w+)"/g;
-  const vc = vcReg.exec(body);
-  return vc && vc.length ? vc[1] : '';
+  const lineReg = /^.*name="jschl_vc".*$/gm;
+  const line = lineReg.exec(body);
+  if (!line) {
+    throw new Error('Failed to find jschl_vc');
+  }
+
+  const valueReg = /\svalue="(\w+)"/g;
+  const result = valueReg.exec(line[0]);
+  if (!result || result.length === 0) {
+    throw new Error('Failed to parse value from jschl');
+  }
+
+  return result[1];
 }
 
 export function passValue(body: string) {
-  const passReg = /name="pass"\svalue="(.+?)"/g;
-  const p = passReg.exec(body);
-  return p && p.length ? p[1] : '';
+  const lineReg = /^.*name="pass".*$/gm;
+  const line = lineReg.exec(body);
+  if (!line) {
+    throw new Error('Failed to find pass field');
+  }
+
+  const valueReg = /\svalue="(.+?)"/g;
+  const result = valueReg.exec(line[0]);
+  if (!result || result.length === 0) {
+    throw new Error('Failed to parse value from pass field');
+  }
+
+  return result[1];
 }
 
 export function sValue(body: string) {

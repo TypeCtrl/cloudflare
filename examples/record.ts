@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import got from 'got';
 import { CookieJar } from 'tough-cookie';
 import { Polly } from '@pollyjs/core';

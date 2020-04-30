@@ -32,7 +32,7 @@ export function isCloudflareCaptcha(body: string) {
 export function solveChallenge(body: string, domain: string) {
   // regex without selecting setTimeout delay ms for reference
   // const timeoutReg = /setTimeout\(function\(\){\s+(var s,t,o,p,b,r,e,a,k,i,n,g,f.+?\r?\n[\s\S]+?a\.value =.+?)\r?\n/;
-  const timeoutReg = /setTimeout\(function\(\){\s+(var s,t,o,p,b,r,e,a,k,i,n,g,f.+?\r?\n[\s\S]+?a\.value =.+?)\r?\n[\s\S]+(\d{4,5})\);/;
+  const timeoutReg = /setTimeout\(\s*function\s*\(\){\s*(var\s+(?:[a-z]\s*,\s*)(?:[a-z]\s*,\s*)+(?:[a-z]\s*,\s*).+?\r?\n[\s\S]+?a\.value\s*=.+?)\r?\n[\s\S]+?,\s*(\d{4,5})\);\s*(?:\/\*eoc\*\/)?/;
   const timeout = timeoutReg.exec(body);
   let js = timeout && timeout.length ? timeout[1] : '';
   js = js.replace(/a\.value = (.+\.toFixed\(10\);).+", r"\1/i, '$1');

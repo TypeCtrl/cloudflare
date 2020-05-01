@@ -34,8 +34,11 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
+    "cookie": "^0.4.1",
     "delay": "^4.3.0",
-    "got": "^11.0.3"
+    "got": "^11.0.3",
+    "parse-headers": "^2.0.3",
+    "tunnel": "0.0.6"
   },
   "devDependencies": {
     "@pollyjs/adapter-fetch": "4.2.1",
@@ -62,6 +65,7 @@
     "semantic-release": "17.0.7",
     "tough-cookie": "4.0.0",
     "ts-jest": "25.4.0",
+    "tsc-watch": "^4.2.3",
     "typescript": "3.8.3"
   },
   "jest": {

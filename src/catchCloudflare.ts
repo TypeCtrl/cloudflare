@@ -1,8 +1,8 @@
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import delay from 'delay';
 import got, { Response, RequiredRetryOptions } from 'got';
-import https from 'https';
-import vm from 'vm';
+import * as https from 'https';
+import * as vm from 'vm';
 import { URLSearchParams } from 'url';
 
 const BUG_REPORT = `

@@ -147,7 +147,6 @@ export function getRValue(body: string): object {
 }
 
 export function getJschlTk(body: string): string {
-  console.log(JSON.stringify(body));
   const exp = /\?__cf_chl_jschl_tk__=(\S+)"/gm;
   const result = exp.exec(body);
   if (result && result.length) {
@@ -230,7 +229,6 @@ export async function catchCloudflare<T extends Buffer | string | object>(
 
   const newHeaders = setupHeaders(config.headers);
   config.headers = { ...config.headers, ...newHeaders } || newHeaders;
-  // console.log(error.options);
   config.headers.referer = `${error.options.url.href}${error.options.pathname || ''}`;
   config.headers['cache-control'] = config.headers['cache-control'] || 'private';
 
@@ -249,7 +247,7 @@ export async function catchCloudflare<T extends Buffer | string | object>(
   // solve js challenge
   const challenge = solveChallenge(body, error.options.url.hostname);
   const jschlTk = getJschlTk(body);
-  console.log({ challenge, method, rValue, s, pass, jschlVc, jschlTk });
+  // console.log({ challenge, method, rValue, s, pass, jschlVc, jschlTk });
 
   // defaults to 6 seconds or ms found in html
   await delay(challenge.ms);

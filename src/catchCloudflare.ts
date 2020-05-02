@@ -147,7 +147,7 @@ export function getRValue(body: string): object {
 }
 
 export function getJschlTk(body: string): string {
-  const exp = /\?__cf_chl_jschl_tk__=(\S+)"/gm;
+  const exp = /[?;]__cf_chl_jschl_tk__=(\S+)"/gm;
   const result = exp.exec(body);
   if (result && result.length) {
     return result[1];

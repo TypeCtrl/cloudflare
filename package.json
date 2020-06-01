@@ -38,7 +38,7 @@
     "got": "^11.0.3"
   },
   "devDependencies": {
-    "@pollyjs/adapter-fetch": "4.2.1",
+    "@pollyjs/adapter-fetch": "4.3.0",
     "@pollyjs/adapter-node-http": "4.2.1",
     "@pollyjs/adapter-xhr": "4.2.1",
     "@pollyjs/core": "4.2.1",
